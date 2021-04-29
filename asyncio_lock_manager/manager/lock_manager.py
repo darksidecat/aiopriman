@@ -1,5 +1,6 @@
-import asyncio
-
+"""
+Lock manager
+"""
 from asyncio_lock_manager.sync_primitives.lock import Lock
 
 

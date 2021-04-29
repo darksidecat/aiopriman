@@ -3,6 +3,7 @@ Lock synchronization primitive
 """
 import asyncio
 from dataclasses import dataclass, field
+from typing import Optional, Deque
 
 
 @dataclass
@@ -12,5 +13,5 @@ class Lock:
 
     # noinspection PyProtectedMember
     @property
-    def waiters(self):
-        return self.lock._waiters
+    def waiters(self) -> Optional[Deque]:
+        return self.lock._waiters  # mypy: ignore
