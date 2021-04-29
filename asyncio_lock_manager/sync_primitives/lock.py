@@ -14,4 +14,4 @@ class Lock:
     # noinspection PyProtectedMember
     @property
     def waiters(self) -> Optional[Deque]:
-        return self.lock._waiters  # mypy: ignore
+        return self.lock._waiters  # type: ignore
