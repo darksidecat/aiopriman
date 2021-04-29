@@ -12,10 +12,9 @@ class LockStorage:
     def get_lock(self, key: str) -> Lock:
         return self.locks.setdefault(key, Lock(key))
 
-    # noinspection PyProtectedMember
     def del_lock(self, key: str) -> None:
         lock = self.locks.get(key)
-        if lock and lock.lock._waiters:
+        if lock and lock.waiters:
             logging.warning("Can`t delete lock with waiters %s" % lock)
             return
         try:
