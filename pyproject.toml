@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "asyncio_lock_manager"
+version = "0.1.0"
+description = ""
+authors = ["darksidecat <bitalik371@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.9.1"
+mypy = "^0.812"
+pytest = "^6.2.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
