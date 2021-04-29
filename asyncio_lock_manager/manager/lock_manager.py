@@ -8,7 +8,7 @@ class LockManager:
         self._lock_storage = lock_storage
         self._key = key
 
-    async def __aenter__(self) -> asyncio.Lock:
+    async def __aenter__(self) -> Lock:
         self._current_lock: Lock = self._lock_storage.get_lock(self._key)
         await self._current_lock.lock.acquire()
         return self._current_lock
