@@ -47,15 +47,17 @@ async def main_run(*args):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG,
-                        format='%(levelname)s:%(name)s:(%(filename)s).%(funcName)s(%(lineno)d):%(message)s')
-    storage = alm.storage.LockStorage("base")
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(levelname)s:%(name)s:(%(filename)s).%(funcName)s(%(lineno)d):%(message)s'
+    )
+    lock_storage = alm.storage.LockStorage("base")
     asyncio.run(
         main_run(
-            run(storage, "1"),
-            run2(storage, "A"),
-            run(storage, "2"),
-            run2(storage, "B"),
-            run(storage, "3"),
+            run(lock_storage, "1"),
+            run2(lock_storage, "A"),
+            run(lock_storage, "2"),
+            run2(lock_storage, "B"),
+            run(lock_storage, "3"),
         )
     )
