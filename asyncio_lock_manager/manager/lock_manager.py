@@ -1,7 +1,12 @@
 """
 Lock manager
 """
-from asyncio_lock_manager.sync_primitives.lock import Lock
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from asyncio_lock_manager.sync_primitives.lock import Lock
 
 
 class LockManager:
