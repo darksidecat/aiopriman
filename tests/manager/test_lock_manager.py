@@ -24,18 +24,24 @@ async def test_lock_manager_with_context(lock_storage):
 
 
 @pytest.mark.asyncio
-async def test_lock_manager_raise_waiters_exc(sem_storage):
+async def test_lock_manager_raise_waiters_exc(lock_storage):
     async def task():
-        async with LockManager(sem_storage, key="test_key"):
+        async with LockManager(lock_storage, key="test_key"):
             await asyncio.sleep(0.2)
 
     async def task2():
-        async with LockManager(sem_storage, key="test_key"):
+        async with LockManager(lock_storage, key="test_key"):
             await asyncio.sleep(0.2)
 
     async def task_del():
         await asyncio.sleep(0.1)
         with pytest.raises(CantDeleteWithWaiters):
-            sem_storage.del_sync_prim("test_key")
+            lock_storage.del_sync_prim("test_key")
 
     await asyncio.gather(task(), task2(), task_del())
+
+
+@pytest.mark.asyncio
+async def test_lock_manager_log_miss_key(caplog, lock_storage):
+    lock_storage.del_sync_prim("test_key")
+    assert 'Can`t find lock by key to delete' in caplog.text

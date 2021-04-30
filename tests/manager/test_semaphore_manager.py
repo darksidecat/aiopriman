@@ -39,3 +39,9 @@ async def test_sem_manager_raise_waiters_exc(sem_storage):
             sem_storage.del_sync_prim("test_key")
 
     await asyncio.gather(task(), task2(), task_del())
+
+
+@pytest.mark.asyncio
+async def test_sem_manager_log_miss_key(caplog, sem_storage):
+    sem_storage.del_sync_prim("test_key")
+    assert 'Can`t find semaphore by key to delete' in caplog.text
