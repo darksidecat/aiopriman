@@ -1,6 +1,3 @@
-"""
-Lock manager
-"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -8,12 +5,12 @@ from typing import TYPE_CHECKING
 from . import BaseManager
 
 if TYPE_CHECKING:
-    from asyncio_lock_manager.sync_primitives.lock import Lock
+    from asyncio_lock_manager.sync_primitives.semaphore import Semaphore
 
 
-class LockManager(BaseManager['Lock']):
-    async def __aenter__(self) -> Lock:
-        self._current_sync_prim: Lock = self._prim_storage.get_sync_prim(self._key)
+class SemaphoreManager(BaseManager['Semaphore']):
+    async def __aenter__(self) -> Semaphore:
+        self._current_sync_prim: Semaphore = self._prim_storage.get_sync_prim(self._key)
         await self._current_sync_prim.sync_prims.acquire()
         return self._current_sync_prim
 

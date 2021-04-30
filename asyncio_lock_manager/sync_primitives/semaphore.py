@@ -1,16 +1,14 @@
-"""
-Lock synchronization primitive
-"""
 import asyncio
 from typing import Optional, Deque
+
 
 from . import SyncPrimitive
 
 
-class Lock(SyncPrimitive[asyncio.Lock]):
-    def __init__(self, key: str):
+class Semaphore(SyncPrimitive[asyncio.Semaphore]):
+    def __init__(self, key, value):
         super().__init__(key)
-        self.sync_prims: asyncio.Lock = asyncio.Lock()
+        self.sync_prims: asyncio.Semaphore = asyncio.Semaphore(value)
 
     # noinspection PyProtectedMember
     @property
