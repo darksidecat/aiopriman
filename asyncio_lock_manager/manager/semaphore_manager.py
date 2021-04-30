@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from . import BaseManager
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from asyncio_lock_manager.sync_primitives.semaphore import Semaphore
 
 

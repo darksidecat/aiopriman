@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 import asyncio_lock_manager as alm
+from asyncio_lock_manager.utils.exceptions import CantDeleteWithWaiters
 
 
 async def run(storage, name):
@@ -14,7 +15,10 @@ async def run(storage, name):
     async with alm.manager.LockManager(storage, "test") as lock:
         logging.debug(f"HERE LOCKED {name}: {lock}")
         await asyncio.sleep(3)
-        storage.del_sync_prim("1111")
+        try:
+            storage.del_sync_prim("1111")
+        except CantDeleteWithWaiters as err:
+            logging.warning(err)
         logging.debug(f"CONTEXT LOCKS {name}: {storage.sync_prims}")
 
     logging.debug(f"HERE UNLOCKED {name}: {lock}")
@@ -32,7 +36,10 @@ async def run2(storage, name):
         await asyncio.sleep(3)
         logging.debug(f"CONTEXT LOCKS {name}: {storage.sync_prims}")
         logging.debug(f"{name}: {lock}")
-        storage.del_sync_prim("1111")
+        try:
+            storage.del_sync_prim("1111")
+        except CantDeleteWithWaiters as err:
+            logging.warning(err)
     finally:
         logging.debug(f"{name}: {lock}")
         lock.sync_prims.release()
@@ -54,7 +61,10 @@ async def run3(storage, name):
         await asyncio.sleep(3)
         logging.debug(f"CONTEXT SEM {name}: {storage.sync_prims}")
         logging.debug(f"{name}: {lock}")
-        storage.del_sync_prim("****")
+        try:
+            storage.del_sync_prim("****")
+        except CantDeleteWithWaiters as err:
+            logging.warning(err)
     finally:
         logging.debug(f"{name}: {lock}")
         lock.sync_prims.release()

@@ -7,6 +7,7 @@ import logging
 
 from asyncio_lock_manager.sync_primitives.lock import Lock
 from .base_storage import SyncPrimitiveStorage
+from ..utils.exceptions import CantDeleteWithWaiters
 
 
 class LockStorage(SyncPrimitiveStorage[Lock]):
@@ -15,10 +16,10 @@ class LockStorage(SyncPrimitiveStorage[Lock]):
 
     def del_sync_prim(self, key: str) -> None:
         lock = self.sync_prims.get(key)
-        if lock and lock.waiters:
-            logging.warning("Can`t delete lock with waiters %s" % lock)
+        if not lock:
+            logging.warning("Can`t find lock by key to delete %s" % key)
             return
-        try:
+        elif lock and lock.waiters:
+            raise CantDeleteWithWaiters("Can`t delete semaphore with waiters %s" % lock)
+        else:
             del self.sync_prims[key]
-        except KeyError as err:
-            logging.warning("Can`t find lock by key to delete %s" % err)
