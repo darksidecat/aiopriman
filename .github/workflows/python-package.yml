@@ -41,4 +41,9 @@ jobs:
 
     - name: Test with pytest
       run: |
-        poetry run pytest
+          poetry run pytest --cov=asyncio_lock_manager --cov-config .coveragerc --cov-report=xml
+    - uses: codecov/codecov-action@v1
+      with:
+        file: coverage.xml
+        flags: unittests
+        name: py-${{ matrix.python-version }}-${{ matrix.os }}
