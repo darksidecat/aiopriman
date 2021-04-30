@@ -12,9 +12,20 @@ class Types(Enum):
 
 class Manager:
     def __init__(self, man_type: Union[Types, str], lock_storage, key):
-        type_ = man_type.value if isinstance(man_type, Types) else Types[man_type].value
+        self.man_type = man_type
+        self.lock_storage = lock_storage
+        self.key = key
+        self.cls = None
+        self.inst = None
+        self.set_manager()
+
+    def set_manager(self):
+        if isinstance(self.man_type, Types):
+            type_ = self.man_type.value
+        else:
+            type_ = Types[self.man_type].value
         self.cls: Callable = type_
-        self.inst = self.cls(lock_storage, key)
+        self.inst = self.cls(self.lock_storage, self.key)
 
     async def __aenter__(self):
         await self.inst.__aenter__()
