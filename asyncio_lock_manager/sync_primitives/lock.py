@@ -18,7 +18,7 @@ class Lock(SyncPrimitive[asyncio.Lock]):
         return self.sync_prims._waiters  # type: ignore
 
     def __repr__(self):
-        return str({"key": self.key, "sem": self.sync_prims})
+        return str({"key": self.key, "lock": self.sync_prims})
 
     def __str__(self):
         return self.__repr__()
