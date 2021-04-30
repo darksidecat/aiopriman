@@ -78,10 +78,9 @@ if __name__ == '__main__':
     asyncio.run(
         main_run(
             run(lock_storage, "1"),
-            run2(lock_storage, "A"),
             run(lock_storage, "2"),
+            run2(lock_storage, "A"),
             run2(lock_storage, "B"),
-            run(lock_storage, "3"),
             run3(semaphore_storage, "-"),
             run3(semaphore_storage, "*"),
         )
