@@ -2,12 +2,12 @@ import asyncio
 import logging
 from typing import Type
 
-import aiopriman as alm
+import aiopriman
 from aiopriman.manager import LockManager, SemaphoreManager
 
 
 async def run(manager, name):
-    man: Type[LockManager] = manager.get(alm.manager.Types.LOCK)
+    man: Type[LockManager] = manager.get(aiopriman.manager.Types.LOCK)
 
     logging.debug(f"START {name}")
     async with man(key="test") as lock:
@@ -16,7 +16,7 @@ async def run(manager, name):
 
 
 async def run2(manager, name):
-    man: Type[SemaphoreManager] = manager.get(alm.manager.Types.SEM)
+    man: Type[SemaphoreManager] = manager.get(aiopriman.manager.Types.SEM)
 
     logging.debug(f"START {name}")
     async with man(key="test", value=2) as lock:
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         format='%(levelname)s:%(name)s:(%(filename)s).%(funcName)s(%(lineno)d):%(message)s'
     )
 
-    manager = alm.manager.Manager()
+    manager = aiopriman.manager.Manager()
 
     asyncio.run(
         main_run(
