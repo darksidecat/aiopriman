@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from asyncio_lock_manager.manager import LockManager
-from asyncio_lock_manager.utils.exceptions import CantDeleteWithWaiters
+from aiopriman.manager import LockManager
+from aiopriman.utils.exceptions import CantDeleteWithWaiters
 
 
 def test_lock_manager_without_context_empty():

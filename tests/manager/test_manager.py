@@ -1,6 +1,6 @@
 import pytest
 
-from asyncio_lock_manager.manager import Manager, Types, BaseManager
+from aiopriman.manager import Manager, Types, BaseManager
 
 
 @pytest.mark.parametrize('prim_type', [

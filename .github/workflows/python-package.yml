@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python package
+name: aiopriman
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
   
     - name: Mypy check
       run: |
-        poetry run mypy asyncio_lock_manager
+        poetry run mypy aiopriman
 
     - name: Test with pytest
       run: |

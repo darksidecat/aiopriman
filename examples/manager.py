@@ -1,8 +1,8 @@
 import asyncio
 import logging
 
-import asyncio_lock_manager as alm
-from asyncio_lock_manager.manager import LockManager, SemaphoreManager
+import aiopriman as alm
+from aiopriman.manager import LockManager, SemaphoreManager
 
 
 async def run(manager, name):

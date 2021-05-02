@@ -6,7 +6,7 @@ from . import BaseManager
 from ..storage import SemaphoreStorage
 
 if TYPE_CHECKING:  # pragma: no cover
-    from asyncio_lock_manager.sync_primitives.semaphore import Semaphore
+    from aiopriman.sync_primitives.semaphore import Semaphore
 
 
 class SemaphoreManager(BaseManager['Semaphore']):

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from asyncio_lock_manager.sync_primitives.semaphore import Semaphore
+from aiopriman.sync_primitives.semaphore import Semaphore
 from .base_storage import SyncPrimitiveStorage
 from ..utils.exceptions import CantDeleteWithWaiters
 

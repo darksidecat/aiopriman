@@ -9,7 +9,7 @@ from . import BaseManager
 from ..storage import LockStorage
 
 if TYPE_CHECKING:  # pragma: no cover
-    from asyncio_lock_manager.sync_primitives.lock import Lock
+    from aiopriman.sync_primitives.lock import Lock
 
 
 class LockManager(BaseManager['Lock']):

@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import logging
 
-from asyncio_lock_manager.sync_primitives.lock import Lock
+from aiopriman.sync_primitives.lock import Lock
 from .base_storage import SyncPrimitiveStorage
 from ..utils.exceptions import CantDeleteWithWaiters
 

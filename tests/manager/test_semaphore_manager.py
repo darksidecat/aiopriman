@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from asyncio_lock_manager.manager import SemaphoreManager
-from asyncio_lock_manager.utils.exceptions import CantDeleteWithWaiters
+from aiopriman.manager import SemaphoreManager
+from aiopriman.utils.exceptions import CantDeleteWithWaiters
 
 
 def test_sem_manager_without_context_empty():
