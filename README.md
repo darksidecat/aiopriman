@@ -29,7 +29,7 @@ async def task_sem(manager):
     sem_man: Type[SemaphoreManager] = manager.get(Types.SEM)
 
     logging.debug(manager.storage_data)
-    async with sem_man(key='lock_key', value=2) as sem:
+    async with sem_man(key='sem_key', value=2) as sem:
         logging.debug(f"HERE SEM LOCK: {sem}")
         await asyncio.sleep(3)
     logging.debug(manager.storage_data)
