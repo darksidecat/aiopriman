@@ -41,7 +41,7 @@ jobs:
 
     - name: Test with pytest
       run: |
-          poetry run pytest --cov=asyncio_lock_manager --cov-config .coveragerc --cov-report=xml
+          poetry run pytest --cov=aiopriman --cov-config .coveragerc --cov-report=xml
     - uses: codecov/codecov-action@v1
       with:
         file: coverage.xml
