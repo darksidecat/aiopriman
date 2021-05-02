@@ -10,6 +10,7 @@ from ..storage import SemaphoreStorage
 
 if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.sync_primitives.semaphore import Semaphore
+    from aiopriman.storage.base_storage import StorageData
 
 
 class SemaphoreManager(BaseManager['Semaphore']):
@@ -17,7 +18,10 @@ class SemaphoreManager(BaseManager['Semaphore']):
     Semaphore manager
     """
 
-    def __init__(self, key=None, storage_data=None, value=1):
+    def __init__(self,
+                 key: str = None,
+                 storage_data: StorageData = None,
+                 value: int = 1):
         """
         :param key: Key for managing semaphore
         :type key: str

@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import partial
-from typing import Type
+from typing import Type, cast
 
 from . import BaseManager
 from .lock_manager import LockManager
@@ -33,17 +33,21 @@ class Manager:
         """
         self.storage_data = storage_data if storage_data else StorageData()
 
-    def get(self, man_type) -> partial[Type[BaseManager]]:
+    def get(self, man_type) -> Type[BaseManager]:
         """
         Get class based on man_type value with settled with functools.partial storage_date
 
         :param man_type: Manager type
         :type man_type: Types | str
-        :return: partial[Type[BaseManager]]
+        :return: Type[BaseManager]
         """
         if isinstance(man_type, Types):
-            return partial(man_type.value, storage_data=self.storage_data)
+            return cast(
+                Type[BaseManager],
+                partial(man_type.value, storage_data=self.storage_data))
         elif isinstance(man_type, str):
-            return partial(Types[man_type].value, storage_data=self.storage_data)
+            return cast(
+                Type[BaseManager],
+                partial(Types[man_type].value, storage_data=self.storage_data))
         else:
             raise TypeError("man_type must be str or manager.Types instance")
