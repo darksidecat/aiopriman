@@ -3,7 +3,8 @@ import asyncio
 import pytest
 
 from aiopriman.manager import SemaphoreManager
-from aiopriman.utils.exceptions import CantDeleteWithWaiters
+from aiopriman.utils.exceptions import CantDeleteWithWaiters, \
+    CantDeleteSemaphoreWithMoreThanOneAcquire
 
 
 def test_sem_manager_without_context_empty():
@@ -48,6 +49,27 @@ async def test_sem_manager_raise_waiters_exc():
             sem_manager.prim_storage.del_sync_prim("test")
 
     sem_manager = SemaphoreManager(key="test")
+    await asyncio.gather(task(sem_manager),
+                         task2(sem_manager),
+                         task_del(sem_manager))
+
+
+@pytest.mark.asyncio
+async def test_sem_manager_raise_more_than_one_aquire():
+    async def task(sem_manager):
+        async with sem_manager:
+            await asyncio.sleep(0.2)
+
+    async def task2(sem_manager):
+        async with sem_manager:
+            await asyncio.sleep(0.2)
+
+    async def task_del(sem_manager):
+        await asyncio.sleep(0.1)
+        with pytest.raises(CantDeleteSemaphoreWithMoreThanOneAcquire):
+            sem_manager.prim_storage.del_sync_prim("test")
+
+    sem_manager = SemaphoreManager(key="test", value=2)
     await asyncio.gather(task(sem_manager),
                          task2(sem_manager),
                          task_del(sem_manager))

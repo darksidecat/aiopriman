@@ -11,6 +11,7 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
     """
     Semaphore synchronization primitive
     """
+
     def __init__(self, key, value):
         """
         :param key: key
@@ -19,6 +20,7 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
         :type value: int, optional
         """
         super().__init__(key)
+        self.init_value = value
         self.semaphore: asyncio.Semaphore = asyncio.Semaphore(value)
 
     # noinspection PyProtectedMember
@@ -29,6 +31,11 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
         :rtype: Optional[Deque]
         """
         return self.semaphore._waiters  # type: ignore
+
+    # noinspection PyProtectedMember
+    @property
+    def value(self) -> int:
+        return self.semaphore._value  # type: ignore
 
     def __repr__(self):
         return str("Semaphore(key={key}, value={sem})".format(
