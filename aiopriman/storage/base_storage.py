@@ -44,7 +44,6 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         :return: synchronization primitive
         :rtype: T
         """
-        ...
 
     @abstractmethod
     def del_sync_prim(self, key: str) -> None:
@@ -57,7 +56,6 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         :type key: str
         :return:
         """
-        ...
 
     @staticmethod
     def resolve_key(prefix, key) -> str:

@@ -44,4 +44,3 @@ class BaseManager(ABC, Generic[T]):
         :return: Storage
         :rtype: SyncPrimitiveStorage
         """
-        ...
