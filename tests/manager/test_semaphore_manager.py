@@ -15,7 +15,7 @@ def test_sem_manager_without_context_add_lock():
     sem_manager = SemaphoreManager()
     sem_manager.prim_storage.get_sync_prim(key="test")
     assert sem_manager.prim_storage.sync_prims
-    assert "Sem:test" in sem_manager.prim_storage.sync_prims
+    assert "SemaphoreStorage:test" in sem_manager.prim_storage.sync_prims
 
 
 @pytest.mark.asyncio
@@ -26,7 +26,7 @@ async def test_sem_manager_with_context():
 
     locks_acquire_result.append(bool(sem_manager.prim_storage.sync_prims))
     async with sem_manager:
-        assert "Sem:test" in sem_manager.prim_storage.sync_prims
+        assert "SemaphoreStorage:test" in sem_manager.prim_storage.sync_prims
         locks_acquire_result.append(bool(sem_manager.prim_storage.sync_prims))
     locks_acquire_result.append(bool(sem_manager.prim_storage.sync_prims))
     assert locks_acquire_result == expected

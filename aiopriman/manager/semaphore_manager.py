@@ -1,3 +1,6 @@
+"""
+Semaphore manager
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -10,15 +13,27 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class SemaphoreManager(BaseManager['Semaphore']):
+    """
+    Semaphore manager
+    """
+
+    def __init__(self, key=None, storage_data=None, value=1):
+        super().__init__(key=key, storage_data=storage_data)
+        self.prim_storage: SemaphoreStorage = self.resolve_storage(self.storage_data)
+        self.value = value
+
     async def __aenter__(self) -> Semaphore:
-        self._current_sync_prim: Semaphore = self.prim_storage.get_sync_prim(self._key)
-        await self._current_sync_prim.sync_prims.acquire()
-        return self._current_sync_prim
+        self._current_semaphore: Semaphore = self.prim_storage.get_sync_prim(
+            key=self._key,
+            value=self.value
+        )
+        await self._current_semaphore.semaphore.acquire()
+        return self._current_semaphore
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        self._current_sync_prim.sync_prims.release()
-        if not self._current_sync_prim.waiters:
+        self._current_semaphore.semaphore.release()
+        if not self._current_semaphore.waiters:
             self.prim_storage.del_sync_prim(self._key)
 
-    def resolve_storage(self, storage_data):
+    def resolve_storage(self, storage_data) -> SemaphoreStorage:
         return SemaphoreStorage(storage_data=storage_data)

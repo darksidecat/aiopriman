@@ -15,7 +15,7 @@ def test_lock_manager_without_context_add_lock():
     lock_manager = LockManager()
     lock_manager.prim_storage.get_sync_prim(key="test")
     assert lock_manager.prim_storage.sync_prims
-    assert "Lock:test" in lock_manager.prim_storage.sync_prims
+    assert "LockStorage:test" in lock_manager.prim_storage.sync_prims
 
 
 @pytest.mark.asyncio
@@ -26,7 +26,7 @@ async def test_lock_manager_with_context():
 
     locks_acquire_result.append(bool(lock_manager.prim_storage.sync_prims))
     async with lock_manager:
-        assert "Lock:test" in lock_manager.prim_storage.sync_prims
+        assert "LockStorage:test" in lock_manager.prim_storage.sync_prims
         locks_acquire_result.append(bool(lock_manager.prim_storage.sync_prims))
     locks_acquire_result.append(bool(lock_manager.prim_storage.sync_prims))
     assert locks_acquire_result == expected

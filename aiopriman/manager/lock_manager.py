@@ -13,15 +13,19 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class LockManager(BaseManager['Lock']):
+    """
+    Locks manager
+    """
+
     async def __aenter__(self) -> Lock:
-        self._current_sync_prim: Lock = self.prim_storage.get_sync_prim(self._key)
-        await self._current_sync_prim.sync_prims.acquire()
-        return self._current_sync_prim
+        self._current_lock: Lock = self.prim_storage.get_sync_prim(self._key)
+        await self._current_lock.lock.acquire()
+        return self._current_lock
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        self._current_sync_prim.sync_prims.release()
-        if not self._current_sync_prim.waiters:
+        self._current_lock.lock.release()
+        if not self._current_lock.waiters:
             self.prim_storage.del_sync_prim(self._key)
 
-    def resolve_storage(self, storage_data):
+    def resolve_storage(self, storage_data) -> LockStorage:
         return LockStorage(storage_data=storage_data)
