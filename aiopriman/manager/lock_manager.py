@@ -24,7 +24,8 @@ class LockManager(BaseManager['Lock']):
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         self._current_lock.lock.release()
-        if not self._current_lock.waiters:
+        if not self._current_lock.lock.locked() and \
+                not self._current_lock.waiters:
             self.prim_storage.del_sync_prim(self._key)
 
     def resolve_storage(self, storage_data) -> LockStorage:
