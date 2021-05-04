@@ -47,13 +47,7 @@ class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
             return
         elif sem and sem.waiters:
             raise CantDeleteWithWaiters("Can`t delete semaphore with waiters %s" % sem)
-
-        # sem.init_value-1 required, otherwise semaphore deleting early, when no waiters and
-        # lefts exactly {value} tasks to run
-        # when value == 1 we pass don't do -1 to sem.init_value
-        # ToDo make more investigation
-        elif sem and (sem.value != sem.init_value-1 and not(sem.init_value == 1 == sem.value)):
-            print(sem, sem.value, sem.init_value)
+        elif sem and sem.value != sem.init_value:
             raise CantDeleteSemaphoreWithMoreThanOneAcquire(
                 "Can`t delete semaphore with with more than one current acquire %s" % sem)
         else:

@@ -43,16 +43,14 @@ class SemaphoreManager(BaseManager['Semaphore']):
         return self._current_semaphore
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        # Check waiters before release for not deleting key too early
+        waiters_before_release = bool(self._current_semaphore.waiters)
         self._current_semaphore.semaphore.release()
 
-        # self.value-1 required, otherwise semaphore deleting early, when no waiters and
-        # lefts exactly {value} tasks to run
-        # when value == 1 we pass don't do -1 to self.value
-        # ToDo make more investigation
         if not self._current_semaphore.semaphore.locked() and\
                 not self._current_semaphore.waiters and \
-                (self._current_semaphore.value == self.value-1 or
-                 self.value == 1 == self._current_semaphore.value):
+                not waiters_before_release and \
+                self._current_semaphore.value == self.value:
             self.prim_storage.del_sync_prim(self._key)
 
     def resolve_storage(self, storage_data) -> SemaphoreStorage:
