@@ -12,7 +12,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.sync_primitives.lock import Lock
 
 
-class LockManager(BaseManager['Lock']):
+class LockManager(BaseManager['Lock', 'LockStorage']):
     """
     Locks manager
     """

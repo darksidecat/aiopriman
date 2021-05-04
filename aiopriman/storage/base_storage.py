@@ -31,7 +31,10 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         :param storage_data: StorageData
         :type storage_data: StorageData, optional
         """
-        self.sync_prims: Dict[str, T] = storage_data if storage_data is not None else StorageData()
+        if storage_data is not None:
+            self.sync_prims: StorageData = storage_data
+        else:
+            self.sync_prims: StorageData = StorageData()
 
     @abstractmethod
     def get_sync_prim(self, key: str) -> T:

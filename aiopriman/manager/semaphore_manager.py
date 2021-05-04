@@ -13,7 +13,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.storage.base_storage import StorageData
 
 
-class SemaphoreManager(BaseManager['Semaphore']):
+class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
     """
     Semaphore manager
     """
@@ -31,7 +31,6 @@ class SemaphoreManager(BaseManager['Semaphore']):
         :type value: int, optional
         """
         super().__init__(key=key, storage_data=storage_data)
-        self.prim_storage: SemaphoreStorage = self.resolve_storage(self.storage_data)
         self.value = value
 
     async def __aenter__(self) -> Semaphore:
@@ -47,7 +46,7 @@ class SemaphoreManager(BaseManager['Semaphore']):
         waiters_before_release = bool(self._current_semaphore.waiters)
         self._current_semaphore.semaphore.release()
 
-        if not self._current_semaphore.semaphore.locked() and\
+        if not self._current_semaphore.semaphore.locked() and \
                 not self._current_semaphore.waiters and \
                 not waiters_before_release and \
                 self._current_semaphore.value == self.value:
