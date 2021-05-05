@@ -5,13 +5,13 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Generic, TypeVar, Optional, Type
+from typing import Generic, TypeVar, Optional, Type, Any
 
-from ..storage.base_storage import StorageData, SyncPrimitiveStorage
+from ..storage import SyncPrimitiveStorage, StorageData
 from ..sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive)
-T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage)
+T = TypeVar('T', bound=SyncPrimitive[Any])
+T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[Any])
 
 
 class BaseManager(ABC, Generic[T, T_Storage]):

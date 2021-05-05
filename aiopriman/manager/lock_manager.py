@@ -7,10 +7,11 @@ from types import TracebackType
 from typing import TYPE_CHECKING, Optional, Type
 
 from . import BaseManager
-from ..storage import LockStorage, StorageData
+from ..storage import LockStorage
 
 if TYPE_CHECKING:  # pragma: no cover
-    from aiopriman.sync_primitives.lock import Lock
+    from aiopriman.sync_primitives import Lock
+    from ..storage import StorageData
 
 
 class LockManager(BaseManager['Lock', 'LockStorage']):
@@ -32,5 +33,5 @@ class LockManager(BaseManager['Lock', 'LockStorage']):
                 not self._current_lock.waiters:
             self.prim_storage.del_sync_prim(self._key)
 
-    def resolve_storage(self, storage_data: StorageData) -> LockStorage:
+    def resolve_storage(self, storage_data: StorageData[Lock]) -> LockStorage:
         return LockStorage(storage_data=storage_data)

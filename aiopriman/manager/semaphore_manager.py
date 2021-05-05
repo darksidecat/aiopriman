@@ -10,8 +10,8 @@ from . import BaseManager
 from ..storage import SemaphoreStorage
 
 if TYPE_CHECKING:  # pragma: no cover
-    from aiopriman.sync_primitives.semaphore import Semaphore
-    from aiopriman.storage.base_storage import StorageData
+    from aiopriman.sync_primitives import Semaphore
+    from aiopriman.storage import StorageData
 
 
 class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
@@ -21,7 +21,7 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
 
     def __init__(self,
                  key: str = "Default",
-                 storage_data: Optional[StorageData] = None,
+                 storage_data: Optional[StorageData[Semaphore]] = None,
                  value: int = 1):
         """
         :param key: Key for managing semaphore
@@ -62,5 +62,5 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
                 self._current_semaphore.value == self.value:
             self.prim_storage.del_sync_prim(self._key)
 
-    def resolve_storage(self, storage_data: StorageData) -> SemaphoreStorage:
+    def resolve_storage(self, storage_data: StorageData[Semaphore]) -> SemaphoreStorage:
         return SemaphoreStorage(storage_data=storage_data)
