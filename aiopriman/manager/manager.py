@@ -25,7 +25,7 @@ class Types(Enum):
     SEM = SemaphoreManager
 
 
-class Manager(Generic[T, T_Storage]):
+class Manager:
     """
     Manager factory that return required manager
 
