@@ -3,7 +3,8 @@ Semaphore manager
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from types import TracebackType
+from typing import TYPE_CHECKING, Optional, Type
 
 from . import BaseManager
 from ..storage import SemaphoreStorage
@@ -19,8 +20,8 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
     """
 
     def __init__(self,
-                 key: str = None,
-                 storage_data: StorageData = None,
+                 key: str = "Default",
+                 storage_data: Optional[StorageData] = None,
                  value: int = 1):
         """
         :param key: Key for managing semaphore
@@ -41,7 +42,10 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
         await self._current_semaphore.semaphore.acquire()
         return self._current_semaphore
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
+    async def __aexit__(self,
+                        exc_type: Optional[Type[BaseException]],
+                        exc_value: Optional[BaseException],
+                        traceback: Optional[TracebackType]) -> None:
         # Check waiters before release for not deleting key too early
         waiters_before_release = bool(self._current_semaphore.waiters)
 
@@ -58,5 +62,5 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
                 self._current_semaphore.value == self.value:
             self.prim_storage.del_sync_prim(self._key)
 
-    def resolve_storage(self, storage_data) -> SemaphoreStorage:
+    def resolve_storage(self, storage_data: StorageData) -> SemaphoreStorage:
         return SemaphoreStorage(storage_data=storage_data)

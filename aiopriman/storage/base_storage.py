@@ -4,14 +4,14 @@ Abstract asyncio synchronization primitive storage
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, Generic, TypeVar
+from typing import Dict, Generic, TypeVar, Any, Optional
 
 from aiopriman.sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive)
+T = TypeVar('T', bound=SyncPrimitive[Any])
 
 
-class StorageData(Dict):
+class StorageData(Dict[str, T]):
     """
     A class containing synchronization primitives
     """
@@ -26,15 +26,15 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         T : subclass of SyncPrimitive
     """
 
-    def __init__(self, storage_data=None):
+    def __init__(self, storage_data: Optional[StorageData[T]] = None):
         """
         :param storage_data: StorageData
         :type storage_data: StorageData, optional
         """
         if storage_data is not None:
-            self.sync_prims: StorageData = storage_data
+            self.sync_prims = storage_data
         else:
-            self.sync_prims: StorageData = StorageData()
+            self.sync_prims = StorageData()
 
     @abstractmethod
     def get_sync_prim(self, key: str) -> T:
@@ -61,7 +61,7 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         """
 
     @staticmethod
-    def resolve_key(prefix, key) -> str:
+    def resolve_key(prefix: str, key: str) -> str:
         """
         Resolve key for current storage type
 
@@ -75,7 +75,7 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         return ":".join([prefix, key])
 
     @property
-    def prefix(self):
+    def prefix(self) -> str:
         """
         Prefix for storage key resolving
 

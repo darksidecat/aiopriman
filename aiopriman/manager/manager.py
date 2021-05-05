@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import partial
-from typing import Type, cast
+from typing import Type, cast, Optional, Union
 
 from . import BaseManager
 from .lock_manager import LockManager
@@ -26,14 +26,14 @@ class Manager:
     Manager factory that return required manager
     """
 
-    def __init__(self, storage_data=None):
+    def __init__(self, storage_data: Optional[StorageData] = None):
         """
         :param storage_data: StorageData
         :type storage_data: StorageData
         """
         self.storage_data = storage_data if storage_data else StorageData()
 
-    def get(self, man_type) -> Type[BaseManager]:
+    def get(self, man_type: Union[Types, str]) -> Type[BaseManager]:
         """
         Get class based on man_type value with settled with functools.partial storage_date
 
