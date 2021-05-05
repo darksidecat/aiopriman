@@ -1,10 +1,15 @@
 """
 Semaphore synchronization primitive
 """
+from __future__ import annotations
+
 import asyncio
-from typing import Optional, Deque
+from typing import Deque, Any, TYPE_CHECKING
 
 from . import SyncPrimitive
+
+if TYPE_CHECKING:  # pragma: no cover
+    from asyncio import Future
 
 
 # noinspection PyProtectedMember
@@ -13,7 +18,7 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
     Semaphore synchronization primitive
     """
 
-    def __init__(self, key, value):
+    def __init__(self, key: str, value: int = 1):
         """
         :param key: key
         :type key: str
@@ -25,22 +30,22 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
         self.semaphore: asyncio.Semaphore = asyncio.Semaphore(value)
 
     @property
-    def waiters(self) -> Optional[Deque]:
+    def waiters(self) -> Deque[Future[Any]]:
         """
         :return: waiters
-        :rtype: Optional[Deque]
+        :rtype: Deque[Future[Any]]
         """
-        return self.semaphore._waiters  # type: ignore
+        return self.semaphore._waiters
 
     @property
     def value(self) -> int:
-        return self.semaphore._value  # type: ignore
+        return self.semaphore._value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str("Semaphore(key={key}, value={sem})".format(
             key=self.key,
             sem=self.semaphore)
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()

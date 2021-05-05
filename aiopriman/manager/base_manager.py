@@ -4,13 +4,14 @@ Abstract asyncio synchronization primitives manager
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from types import TracebackType
+from typing import Generic, TypeVar, Optional, Type, Any
 
-from ..storage.base_storage import StorageData, SyncPrimitiveStorage
+from ..storage import SyncPrimitiveStorage, StorageData
 from ..sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive)
-T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage)
+T = TypeVar('T', bound=SyncPrimitive[Any])
+T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[Any])
 
 
 class BaseManager(ABC, Generic[T, T_Storage]):
@@ -22,7 +23,7 @@ class BaseManager(ABC, Generic[T, T_Storage]):
         T_Storage : subclass of SyncPrimitiveStorage
     """
 
-    def __init__(self, key=None, storage_data=None):
+    def __init__(self, key: str = "Default", storage_data: Optional[StorageData[T]] = None):
         """
         :param key: Key for managing sync primitive
         :type key: str
@@ -37,10 +38,13 @@ class BaseManager(ABC, Generic[T, T_Storage]):
     async def __aenter__(self) -> T: ...
 
     @abstractmethod
-    async def __aexit__(self, exc_type, exc_val, exc_tb): ...
+    async def __aexit__(self,
+                        exc_type: Optional[Type[BaseException]],
+                        exc_value: Optional[BaseException],
+                        traceback: Optional[TracebackType]) -> None: ...
 
     @abstractmethod
-    def resolve_storage(self, storage_data) -> T_Storage:
+    def resolve_storage(self, storage_data: StorageData[T]) -> T_Storage:
         """Resolve storage for current manager type
 
         This method must be overridden.

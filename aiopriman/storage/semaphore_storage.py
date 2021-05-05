@@ -11,7 +11,7 @@ from ..utils.exceptions import CantDeleteWithWaiters, CantDeleteSemaphoreWithMor
 
 
 class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
-    def get_sync_prim(self, key: str, value=1) -> Semaphore:
+    def get_sync_prim(self, key: str, value: int = 1) -> Semaphore:
         """
         Return Semaphore from storage,
         if key not exist in storage then create lock

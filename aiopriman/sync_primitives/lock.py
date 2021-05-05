@@ -1,16 +1,22 @@
 """
 Lock synchronization primitive
 """
+from __future__ import annotations
+
 import asyncio
-from typing import Optional, Deque
+from typing import Any, Deque, TYPE_CHECKING
 
 from . import SyncPrimitive
+
+if TYPE_CHECKING:  # pragma: no cover
+    from asyncio import Future
 
 
 class Lock(SyncPrimitive[asyncio.Lock]):
     """
     Lock synchronization primitive
     """
+
     def __init__(self, key: str):
         """
         :param key: key
@@ -21,18 +27,18 @@ class Lock(SyncPrimitive[asyncio.Lock]):
 
     # noinspection PyProtectedMember
     @property
-    def waiters(self) -> Optional[Deque]:
+    def waiters(self) -> Deque[Future[Any]]:
         """
         :return: waiters
-        :rtype: Optional[Deque]
+        :rtype:Deque[Future[Any]]
         """
         return self.lock._waiters  # type: ignore
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str("Lock(key={key}, value={lock})".format(
             key=self.key,
             lock=self.lock)
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
