@@ -44,6 +44,12 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         # Check waiters before release for not deleting key too early
         waiters_before_release = bool(self._current_semaphore.waiters)
+
+        # In case when Semaphore released more times than acquired
+        if self.value == self._current_semaphore.value:
+            self.value += 1
+            self._current_semaphore.init_value += 1
+
         self._current_semaphore.semaphore.release()
 
         if not self._current_semaphore.semaphore.locked() and \

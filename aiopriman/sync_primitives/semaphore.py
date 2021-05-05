@@ -7,6 +7,7 @@ from typing import Optional, Deque
 from . import SyncPrimitive
 
 
+# noinspection PyProtectedMember
 class Semaphore(SyncPrimitive[asyncio.Semaphore]):
     """
     Semaphore synchronization primitive
@@ -23,7 +24,6 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
         self.init_value = value
         self.semaphore: asyncio.Semaphore = asyncio.Semaphore(value)
 
-    # noinspection PyProtectedMember
     @property
     def waiters(self) -> Optional[Deque]:
         """
@@ -32,7 +32,6 @@ class Semaphore(SyncPrimitive[asyncio.Semaphore]):
         """
         return self.semaphore._waiters  # type: ignore
 
-    # noinspection PyProtectedMember
     @property
     def value(self) -> int:
         return self.semaphore._value  # type: ignore
