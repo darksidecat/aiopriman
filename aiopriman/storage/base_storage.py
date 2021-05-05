@@ -4,11 +4,11 @@ Abstract asyncio synchronization primitive storage
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, Generic, TypeVar, Any, Optional
+from typing import Dict, Generic, TypeVar, Optional
 
 from aiopriman.sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive[Any])
+T = TypeVar('T', bound=SyncPrimitive)
 
 
 class StorageData(Dict[str, T]):

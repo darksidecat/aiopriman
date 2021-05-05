@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import partial
-from typing import Type, cast, Optional, Union, TypeVar, Any, Generic
+from typing import Type, cast, Optional, Union, TypeVar, Any
 
 from . import BaseManager
 from .lock_manager import LockManager
@@ -13,7 +13,7 @@ from .semaphore_manager import SemaphoreManager
 from ..storage import StorageData, SyncPrimitiveStorage
 from ..sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive[Any])
+T = TypeVar('T', bound=SyncPrimitive)
 T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[Any])
 
 

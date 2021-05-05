@@ -13,7 +13,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 # noinspection PyProtectedMember
-class Semaphore(SyncPrimitive[asyncio.Semaphore]):
+class Semaphore(SyncPrimitive):
     """
     Semaphore synchronization primitive
     """

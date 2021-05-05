@@ -12,7 +12,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from asyncio import Future
 
 
-class Lock(SyncPrimitive[asyncio.Lock]):
+class Lock(SyncPrimitive):
     """
     Lock synchronization primitive
     """

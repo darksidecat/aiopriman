@@ -10,7 +10,7 @@ from typing import Generic, TypeVar, Optional, Type, Any
 from ..storage import SyncPrimitiveStorage, StorageData
 from ..sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive[Any])
+T = TypeVar('T', bound=SyncPrimitive)
 T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[Any])
 
 
