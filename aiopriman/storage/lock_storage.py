@@ -17,9 +17,7 @@ class LockStorage(SyncPrimitiveStorage[Lock]):
         if key not exist in storage then create lock
 
         :param key: key
-        :type key: str
         :return: Lock
-        :rtype: Lock
         """
         return self.sync_prims.setdefault(self.resolve_key(self.prefix, key),
                                           Lock(self.resolve_key(self.prefix, key)))
@@ -31,7 +29,6 @@ class LockStorage(SyncPrimitiveStorage[Lock]):
         if key not found logging this
 
         :param key: key
-        :type key: str
         :return:
         """
         lock = self.sync_prims.get(self.resolve_key(self.prefix, key))

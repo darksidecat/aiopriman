@@ -20,7 +20,6 @@ class Lock(SyncPrimitive):
     def __init__(self, key: str):
         """
         :param key: key
-        :type key: str
         """
         super().__init__(key)
         self.lock: asyncio.Lock = asyncio.Lock()
@@ -30,7 +29,6 @@ class Lock(SyncPrimitive):
     def waiters(self) -> Deque[Future[Any]]:
         """
         :return: waiters
-        :rtype:Deque[Future[Any]]
         """
         return self.lock._waiters  # type: ignore
 

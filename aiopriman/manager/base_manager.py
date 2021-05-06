@@ -26,9 +26,7 @@ class BaseManager(ABC, Generic[T_co, T_Storage]):
     def __init__(self, key: str = "Default", storage_data: Optional[StorageData[T_co]] = None):
         """
         :param key: Key for managing sync primitive
-        :type key: str
         :param storage_data: StorageData
-        :type storage_data: StorageData, optional
         """
         self.storage_data = storage_data if storage_data is not None else StorageData()
         self.prim_storage: T_Storage = self.resolve_storage(self.storage_data)
@@ -51,5 +49,4 @@ class BaseManager(ABC, Generic[T_co, T_Storage]):
 
         :param storage_data: StorageData
         :return: Storage
-        :rtype: T_Storage
         """

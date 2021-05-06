@@ -37,7 +37,6 @@ class Manager:
     def __init__(self, storage_data: Optional[StorageData[T_co]] = None):
         """
         :param storage_data: StorageData
-        :type storage_data: StorageData
         """
         self.storage_data = storage_data if storage_data else StorageData()
 
@@ -46,8 +45,6 @@ class Manager:
         Get class based on man_type value with settled with functools.partial storage_date
 
         :param man_type: Manager type
-        :type man_type: Types | str
-        :return: Type[BaseManager]
         """
         if isinstance(man_type, Types):
             return cast(

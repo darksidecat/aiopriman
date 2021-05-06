@@ -25,11 +25,8 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
                  value: int = 1):
         """
         :param key: Key for managing semaphore
-        :type key: str
         :param storage_data: StorageData
-        :type storage_data: StorageData, optional
         :param value: Semaphore internal counter, defaults to 1
-        :type value: int, optional
         """
         super().__init__(key=key, storage_data=storage_data)
         self.value = value

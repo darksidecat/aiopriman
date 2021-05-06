@@ -21,9 +21,7 @@ class Semaphore(SyncPrimitive):
     def __init__(self, key: str, value: int = 1):
         """
         :param key: key
-        :type key: str
         :param value: Semaphore internal counter, defaults to 1
-        :type value: int, optional
         """
         super().__init__(key)
         self.init_value = value
@@ -33,7 +31,6 @@ class Semaphore(SyncPrimitive):
     def waiters(self) -> Deque[Future[Any]]:
         """
         :return: waiters
-        :rtype: Deque[Future[Any]]
         """
         return self.semaphore._waiters
 

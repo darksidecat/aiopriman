@@ -29,7 +29,6 @@ class SyncPrimitiveStorage(ABC, Generic[T_co]):
     def __init__(self, storage_data: Optional[StorageData[T_co]] = None):
         """
         :param storage_data: StorageData
-        :type storage_data: StorageData, optional
         """
         if storage_data is not None:
             self.sync_prims = storage_data
@@ -43,9 +42,7 @@ class SyncPrimitiveStorage(ABC, Generic[T_co]):
         if key not exist in storage then create this primitive
 
         :param key: key
-        :type key: str
         :return: synchronization primitive
-        :rtype: T_co
         """
 
     @abstractmethod
@@ -56,7 +53,6 @@ class SyncPrimitiveStorage(ABC, Generic[T_co]):
         if key not found logging this
 
         :param key: key
-        :type key: str
         :return:
         """
 
@@ -66,11 +62,8 @@ class SyncPrimitiveStorage(ABC, Generic[T_co]):
         Resolve key for current storage type
 
         :param prefix: prefix
-        :type prefix: str
         :param key: key
-        :type key: str
-        :return: prefix:key
-        :rtype: str
+        :return: "prefix:key"
         """
         return ":".join([prefix, key])
 
@@ -80,6 +73,5 @@ class SyncPrimitiveStorage(ABC, Generic[T_co]):
         Prefix for storage key resolving
 
         :return: prefix
-        :rtype: str
         """
         return self.__class__.__name__

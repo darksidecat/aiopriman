@@ -14,6 +14,5 @@ class SyncPrimitive(ABC):
     def __init__(self, key: str):
         """
         :param key: key
-        :type key: str
         """
         self.key = key

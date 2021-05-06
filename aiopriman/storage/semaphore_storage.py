@@ -17,11 +17,8 @@ class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
         if key not exist in storage then create lock
 
         :param key: key
-        :type key: str
         :param value: Semaphore internal counter, defaults to 1
-        :type value: int, optional
         :return: Semaphore
-        :rtype: Semaphore
         """
         return self.sync_prims.setdefault(self.resolve_key(self.prefix, key),
                                           Semaphore(self.resolve_key(self.prefix, key),
@@ -38,7 +35,6 @@ class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
         if key not found logging this
 
         :param key: key
-        :type key: str
         :return:
         """
         sem = self.sync_prims.get(self.resolve_key(self.prefix, key))
