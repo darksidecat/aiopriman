@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "asyncio_lock_manager"
-version = "0.1.0"
+name = "aiopriman"
+version = "0.1.3"
 description = ""
 authors = ["darksidecat <bitalik371@gmail.com>"]
 

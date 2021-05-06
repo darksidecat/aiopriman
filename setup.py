@@ -1,9 +1,16 @@
-from setuptools import setup
+import sys
+
+from setuptools import setup, find_packages
+
+# Check python version
+MINIMAL_PY_VERSION = (3, 7)
+if sys.version_info < MINIMAL_PY_VERSION:
+    raise RuntimeError('aiopriman works only with Python {}+'.format('.'.join(map(str, MINIMAL_PY_VERSION))))
 
 setup(
     name='aiopriman',
-    packages=['aiopriman'],
-    version='0.1.1',
+    packages=find_packages(exclude=('tests', 'tests.*', 'examples.*', 'docs',)),
+    version='0.1.3',
     license='MIT',
     description='library for managing asyncio synchronization primitives',
     author='darksidecat',

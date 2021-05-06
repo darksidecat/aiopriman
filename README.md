@@ -2,6 +2,8 @@
 
 [![codecov](https://codecov.io/gh/darksidecat/aiopriman/branch/main/graph/badge.svg?token=Z0P6ZKJV43)](https://codecov.io/gh/darksidecat/aiopriman)
 
+# Install
+```pip install aiopriman```
 
 # Usage Examples
 
