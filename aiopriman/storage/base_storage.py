@@ -8,25 +8,25 @@ from typing import Dict, Generic, TypeVar, Optional
 
 from aiopriman.sync_primitives import SyncPrimitive
 
-T = TypeVar('T', bound=SyncPrimitive)
+T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
 
 
-class StorageData(Dict[str, T]):
+class StorageData(Dict[str, T_co]):
     """
     A class containing synchronization primitives
     """
     pass
 
 
-class SyncPrimitiveStorage(ABC, Generic[T]):
+class SyncPrimitiveStorage(ABC, Generic[T_co]):
     """
     Abstract asyncio synchronization primitives storage
 
     Inputs:
-        T : subclass of SyncPrimitive
+        T_co : subclass of SyncPrimitive
     """
 
-    def __init__(self, storage_data: Optional[StorageData[T]] = None):
+    def __init__(self, storage_data: Optional[StorageData[T_co]] = None):
         """
         :param storage_data: StorageData
         :type storage_data: StorageData, optional
@@ -37,7 +37,7 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
             self.sync_prims = StorageData()
 
     @abstractmethod
-    def get_sync_prim(self, key: str) -> T:
+    def get_sync_prim(self, key: str) -> T_co:
         """
         Return synchronization primitive from storage,
         if key not exist in storage then create this primitive
@@ -45,7 +45,7 @@ class SyncPrimitiveStorage(ABC, Generic[T]):
         :param key: key
         :type key: str
         :return: synchronization primitive
-        :rtype: T
+        :rtype: T_co
         """
 
     @abstractmethod
