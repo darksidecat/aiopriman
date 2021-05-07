@@ -4,6 +4,7 @@
 [![PyPi Package Version](https://img.shields.io/pypi/v/aiopriman?style=flat-square)](https://pypi.python.org/pypi/aiopriman)
 [![PyPi status](https://img.shields.io/pypi/status/aiopriman?style=flat-square)](https://pypi.python.org/pypi/aiopriman)
 [![Supported python versions](https://img.shields.io/pypi/pyversions/aiopriman?style=flat-square)](https://pypi.python.org/pypi/aiopriman)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/aiopriman?style=flat-square)](https://pypi.python.org/pypi/aiopriman)
 [![MIT License](https://img.shields.io/pypi/l/aiopriman?style=flat-square)](https://opensource.org/licenses/MIT)
 
 # Install
