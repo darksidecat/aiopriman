@@ -7,6 +7,8 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/aiopriman?style=flat-square)](https://pypi.python.org/pypi/aiopriman)
 [![MIT License](https://img.shields.io/pypi/l/aiopriman?style=flat-square)](https://opensource.org/licenses/MIT)
 
+# Attention! the project is at the initial stage of development, so there may be changes that break backward compatibility
+
 # Install
 ```pip install aiopriman```
 
