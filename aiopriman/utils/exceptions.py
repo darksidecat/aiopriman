@@ -8,6 +8,6 @@ class CantDeleteWithWaiters(Exception):
     pass
 
 
-class CantDeleteSemaphoreWithMoreThanOneAcquire(Exception):
-    """Semaphore with more than one current acquire cant be deleted"""
+class CantDeleteSemaphoreWithAcquire(Exception):
+    """Semaphore with acquire cant be deleted"""
     pass

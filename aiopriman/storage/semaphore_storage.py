@@ -7,7 +7,7 @@ import logging
 
 from aiopriman.sync_primitives.semaphore import Semaphore
 
-from ..utils.exceptions import (CantDeleteSemaphoreWithMoreThanOneAcquire,
+from ..utils.exceptions import (CantDeleteSemaphoreWithAcquire,
                                 CantDeleteWithWaiters)
 from .base_storage import SyncPrimitiveStorage
 
@@ -46,7 +46,7 @@ class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
         elif sem and sem.waiters:
             raise CantDeleteWithWaiters("Can`t delete semaphore with waiters %s" % sem)
         elif sem and sem.value != sem.init_value:
-            raise CantDeleteSemaphoreWithMoreThanOneAcquire(
-                "Can`t delete semaphore with with more than one current acquire %s" % sem)
+            raise CantDeleteSemaphoreWithAcquire(
+                "Can`t delete semaphore with acquire %s" % sem)
         else:
             del self.sync_prims[self.resolve_key(self.prefix, key)]
