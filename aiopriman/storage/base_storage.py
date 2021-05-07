@@ -4,7 +4,7 @@ Abstract asyncio synchronization primitive storage
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, Generic, TypeVar, Optional
+from typing import Dict, Generic, Optional, TypeVar
 
 from aiopriman.sync_primitives import SyncPrimitive
 

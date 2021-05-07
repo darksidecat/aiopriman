@@ -4,9 +4,9 @@ Semaphore synchronization primitive
 from __future__ import annotations
 
 import asyncio
-from typing import Deque, Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Deque
 
-from . import SyncPrimitive
+from .sync_primitive import SyncPrimitive
 
 if TYPE_CHECKING:  # pragma: no cover
     from asyncio import Future

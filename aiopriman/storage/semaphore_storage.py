@@ -6,8 +6,10 @@ from __future__ import annotations
 import logging
 
 from aiopriman.sync_primitives.semaphore import Semaphore
+
+from ..utils.exceptions import (CantDeleteSemaphoreWithMoreThanOneAcquire,
+                                CantDeleteWithWaiters)
 from .base_storage import SyncPrimitiveStorage
-from ..utils.exceptions import CantDeleteWithWaiters, CantDeleteSemaphoreWithMoreThanOneAcquire
 
 
 class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):

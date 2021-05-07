@@ -6,7 +6,7 @@ from .semaphore_manager import SemaphoreManager
 __all__ = (
     'BaseManager',
     'LockManager',
-    'SemaphoreManager',
     'Manager',
-    'Types'
+    'SemaphoreManager',
+    'Types',
 )

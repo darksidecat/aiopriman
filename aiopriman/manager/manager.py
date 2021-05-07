@@ -5,13 +5,13 @@ from __future__ import annotations
 
 from enum import Enum
 from functools import partial
-from typing import Type, cast, Optional, Union, TypeVar
+from typing import Optional, Type, TypeVar, Union, cast
 
-from . import BaseManager
-from .lock_manager import LockManager
-from .semaphore_manager import SemaphoreManager
 from ..storage import StorageData, SyncPrimitiveStorage
 from ..sync_primitives import SyncPrimitive
+from .base_manager import BaseManager
+from .lock_manager import LockManager
+from .semaphore_manager import SemaphoreManager
 
 T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
 T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[SyncPrimitive])

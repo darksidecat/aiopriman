@@ -6,12 +6,12 @@ from __future__ import annotations
 from types import TracebackType
 from typing import TYPE_CHECKING, Optional, Type
 
-from . import BaseManager
 from ..storage import SemaphoreStorage
+from .base_manager import BaseManager
 
 if TYPE_CHECKING:  # pragma: no cover
-    from aiopriman.sync_primitives import Semaphore
     from aiopriman.storage import StorageData
+    from aiopriman.sync_primitives import Semaphore
 
 
 class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):

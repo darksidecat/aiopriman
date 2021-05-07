@@ -6,8 +6,9 @@ from __future__ import annotations
 import logging
 
 from aiopriman.sync_primitives.lock import Lock
-from .base_storage import SyncPrimitiveStorage
+
 from ..utils.exceptions import CantDeleteWithWaiters
+from .base_storage import SyncPrimitiveStorage
 
 
 class LockStorage(SyncPrimitiveStorage[Lock]):

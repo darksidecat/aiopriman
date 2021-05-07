@@ -6,11 +6,12 @@ from __future__ import annotations
 from types import TracebackType
 from typing import TYPE_CHECKING, Optional, Type
 
-from . import BaseManager
 from ..storage import LockStorage
+from .base_manager import BaseManager
 
 if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.sync_primitives import Lock
+
     from ..storage import StorageData
 
 

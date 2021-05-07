@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from types import TracebackType
-from typing import Generic, TypeVar, Optional, Type
+from typing import Generic, Optional, Type, TypeVar
 
-from ..storage import SyncPrimitiveStorage, StorageData
+from ..storage import StorageData, SyncPrimitiveStorage
 from ..sync_primitives import SyncPrimitive
 
 T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
