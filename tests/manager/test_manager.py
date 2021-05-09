@@ -1,6 +1,6 @@
 import pytest
 
-from aiopriman.manager import Manager, Types, BaseManager
+from aiopriman.manager import BaseManager, LockManager, Manager, Types
 
 
 @pytest.mark.parametrize('prim_type', [
@@ -12,7 +12,7 @@ from aiopriman.manager import Manager, Types, BaseManager
 def test_manager_invalid_prim_type(prim_type):
     m = Manager()
     with pytest.raises(TypeError):
-        m.get(man_type=prim_type)(key="test")
+        m.get(man_type=prim_type)
 
 
 @pytest.mark.parametrize('prim_type', [
@@ -25,6 +25,12 @@ def test_manager_without_context_empty(prim_type):
     m = Manager()
     manager: [BaseManager] = m.get(man_type=prim_type)(key="test")
     assert not manager.prim_storage.sync_prims
+
+
+def test_manager_incorrect_type():
+    m = Manager()
+    with pytest.raises(ValueError):
+        m.get(man_type="IncorrectTypeName")
 
 
 @pytest.mark.parametrize('prim_type', [
@@ -45,3 +51,19 @@ async def test_manager_with_context(prim_type):
         locks_acquire_result.append(bool(manager.prim_storage.sync_prims))
     locks_acquire_result.append(bool(manager.prim_storage.sync_prims))
     assert locks_acquire_result == expected
+
+
+def test_manager_custom_class():
+    class T(Types):
+        NEW = LockManager
+
+    T.NEW2 = LockManager
+
+    m = Manager(types=T)
+    a = m.get(man_type="NEW")
+    b = m.get(man_type=T.NEW)
+    c = m.get(man_type="NEW2")
+
+    assert a.func is b.func
+    assert a.func is LockManager
+    assert a.func is c.func

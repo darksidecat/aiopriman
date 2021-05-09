@@ -4,8 +4,8 @@ import pytest
 
 from aiopriman.manager import SemaphoreManager
 from aiopriman.sync_primitives import Semaphore
-from aiopriman.utils.exceptions import CantDeleteWithWaiters, \
-    CantDeleteSemaphoreWithAcquire
+from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
+                                        CantDeleteWithWaiters)
 
 
 def test_sem_manager_without_context_empty():
@@ -76,8 +76,7 @@ async def test_sem_manager_raise_more_than_one_aquire():
                          task_del(sem_manager))
 
 
-@pytest.mark.asyncio
-async def test_sem_manager_log_miss_key(caplog):
+def test_sem_manager_log_miss_key(caplog):
     sem_manager = SemaphoreManager()
     sem_manager.prim_storage.del_sync_prim("test")
     assert 'Can`t find semaphore by key to delete' in caplog.text
