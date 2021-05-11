@@ -9,6 +9,14 @@
 
 # Attention! the project is at the initial stage of development, so there may be changes that break backward compatibility
 
+This package provides the ability to manage asyncio synchronization primitives.
+Allows you to create storages of primitives, provides convenient means for accessing them using context managers,
+factories, creation and access to synchronization primitives by key.
+
+Designed to solve the problem of managing dynamically created synchronization primitives for different resources.
+
+Primitives are stored in memory only when needed.
+
 # Install
 ```pip install aiopriman```
 
