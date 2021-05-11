@@ -3,10 +3,10 @@ import logging
 from typing import Type
 
 import aiopriman
-from aiopriman.manager import LockManager, SemaphoreManager
+from aiopriman.manager import Manager, LockManager, SemaphoreManager
 
 
-async def run(manager, name):
+async def run_lock(manager, name):
     man: Type[LockManager] = manager.get(aiopriman.manager.Types.LOCK)
 
     logging.debug(f"START {name}")
@@ -15,7 +15,7 @@ async def run(manager, name):
         await asyncio.sleep(3)
 
 
-async def run2(manager, name):
+async def run_sem(manager, name):
     man: Type[SemaphoreManager] = manager.get(aiopriman.manager.Types.SEM)
 
     logging.debug(f"START {name}")
@@ -34,17 +34,14 @@ if __name__ == '__main__':
         format='%(levelname)s:%(name)s:(%(filename)s).%(funcName)s(%(lineno)d):%(message)s'
     )
 
-    manager = aiopriman.manager.Manager()
+    tasks = []
+    manager = Manager()
+    for i in range(1, 10):
+        tasks.append(run_lock(manager, i))
+        tasks.append(run_sem(manager, i))
 
     asyncio.run(
         main_run(
-            run(manager, "1"),
-            run(manager, "2"),
-            run2(manager, "3"),
-            run2(manager, "4"),
-            run(manager, "1"),
-            run(manager, "2"),
-            run2(manager, "3"),
-            run2(manager, "4"),
+           *tasks
         )
     )
