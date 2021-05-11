@@ -25,6 +25,7 @@ class Semaphore(SyncPrimitive):
         """
         super().__init__(key)
         self.init_value = value
+        self.pending = 0  # counter for SemaphoreManager
         self.semaphore: asyncio.Semaphore = asyncio.Semaphore(value)
 
     @property
@@ -39,9 +40,12 @@ class Semaphore(SyncPrimitive):
         return self.semaphore._value
 
     def __repr__(self) -> str:
-        return str("Semaphore(key={key}, value={sem})".format(
-            key=self.key,
-            sem=self.semaphore)
+        return str(
+            "Semaphore(key={key}, value={sem}, pending={pending})".format(
+                key=self.key,
+                sem=self.semaphore,
+                pending=self.pending,
+            )
         )
 
     def __str__(self) -> str:

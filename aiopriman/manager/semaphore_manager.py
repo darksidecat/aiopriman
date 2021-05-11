@@ -36,6 +36,7 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
             key=self._key,
             value=self.value
         )
+        self._current_semaphore.pending += 1
         await self._current_semaphore.semaphore.acquire()
         return self._current_semaphore
 
@@ -52,11 +53,14 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
             self._current_semaphore.init_value += 1
 
         self._current_semaphore.semaphore.release()
+        self._current_semaphore.pending -= 1
 
-        if not self._current_semaphore.semaphore.locked() and \
-                not self._current_semaphore.waiters and \
-                not waiters_before_release and \
-                self._current_semaphore.value == self.value:
+        # Todo remove unnecessary checks if there is, need investigation
+        if (not self._current_semaphore.semaphore.locked() and
+                not self._current_semaphore.waiters and
+                not waiters_before_release and
+                self._current_semaphore.value == self.value
+                and self._current_semaphore.pending == 0):
             self.prim_storage.del_sync_prim(self._key)
 
     def resolve_storage(self, storage_data: StorageData[Semaphore]) -> SemaphoreStorage:
