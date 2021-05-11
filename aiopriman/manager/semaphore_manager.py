@@ -48,9 +48,9 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage']):
         waiters_before_release = bool(self._current_semaphore.waiters)
 
         # In case when Semaphore released more times than acquired
-        if self.value == self._current_semaphore.value:
-            self.value += 1
-            self._current_semaphore.init_value += 1
+        if self.value <= self._current_semaphore.value:
+            self.value = self._current_semaphore.value + 1
+            self._current_semaphore.init_value = self._current_semaphore.value + 1
 
         self._current_semaphore.semaphore.release()
         self._current_semaphore.pending -= 1
