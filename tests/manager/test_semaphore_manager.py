@@ -91,3 +91,32 @@ async def test_sem_increasing_value():
         sem.semaphore.release()
     assert [sem.init_value, sem.value, sem_manager.value] == [init_value+1]*3
     assert not sem_manager.prim_storage.sync_prims
+
+
+@pytest.mark.asyncio
+async def test_sem_no_cant_find_key_warning_odd(caplog):
+    async def task(sem_manager):
+        async with sem_manager:
+            await asyncio.sleep(0.2)
+
+    sem_manager = SemaphoreManager(key="test", value=2)
+    await asyncio.gather(task(sem_manager),
+                         task(sem_manager),
+                         task(sem_manager),
+                         )
+    assert 'Can`t find semaphore by key to delete' not in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_sem_no_cant_find_key_warning_even(caplog):
+    async def task(sem_manager):
+        async with sem_manager:
+            await asyncio.sleep(0.2)
+
+    sem_manager = SemaphoreManager(key="test", value=2)
+    await asyncio.gather(task(sem_manager),
+                         task(sem_manager),
+                         task(sem_manager),
+                         task(sem_manager),
+                         )
+    assert 'Can`t find semaphore by key to delete' not in caplog.text
