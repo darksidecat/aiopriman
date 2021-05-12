@@ -18,7 +18,7 @@ class StorageData(Dict[str, T_co]):
     pass
 
 
-class SyncPrimitiveStorage(ABC, Generic[T_co]):
+class BaseStorage(ABC, Generic[T_co]):
     """
     Abstract asyncio synchronization primitives storage
 

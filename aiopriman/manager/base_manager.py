@@ -4,14 +4,13 @@ Abstract asyncio synchronization primitives manager
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from types import TracebackType
-from typing import Generic, Optional, Type, TypeVar
+from typing import Generic, Optional, TypeVar
 
-from ..storage import StorageData, SyncPrimitiveStorage
-from ..sync_primitives import SyncPrimitive
+from aiopriman.storage import BaseStorage, StorageData
+from aiopriman.sync_primitives import SyncPrimitive
 
 T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
-T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[SyncPrimitive])
+T_Storage = TypeVar('T_Storage', bound=BaseStorage[SyncPrimitive])
 
 
 class BaseManager(ABC, Generic[T_co, T_Storage]):
@@ -31,15 +30,6 @@ class BaseManager(ABC, Generic[T_co, T_Storage]):
         self.storage_data = storage_data if storage_data is not None else StorageData()
         self.prim_storage: T_Storage = self.resolve_storage(self.storage_data)
         self._key = key
-
-    @abstractmethod
-    async def __aenter__(self) -> T_co: ...
-
-    @abstractmethod
-    async def __aexit__(self,
-                        exc_type: Optional[Type[BaseException]],
-                        exc_value: Optional[BaseException],
-                        traceback: Optional[TracebackType]) -> None: ...
 
     @abstractmethod
     def resolve_storage(self, storage_data: StorageData[T_co]) -> T_Storage:

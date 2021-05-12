@@ -6,12 +6,12 @@ from __future__ import annotations
 import logging
 
 from aiopriman.sync_primitives.lock import Lock
+from aiopriman.utils.exceptions import CantDeleteWithWaiters
 
-from ..utils.exceptions import CantDeleteWithWaiters
-from .base_storage import SyncPrimitiveStorage
+from .base_storage import BaseStorage
 
 
-class LockStorage(SyncPrimitiveStorage[Lock]):
+class LockStorage(BaseStorage[Lock]):
     def get_sync_prim(self, key: str) -> Lock:
         """
         Return Lock from storage,

@@ -1,4 +1,4 @@
-from .base_storage import StorageData, SyncPrimitiveStorage
+from .base_storage import BaseStorage, StorageData
 from .lock_storage import LockStorage
 from .semaphore_storage import SemaphoreStorage
 
@@ -6,5 +6,5 @@ __all__ = (
     'LockStorage',
     'SemaphoreStorage',
     'StorageData',
-    'SyncPrimitiveStorage',
+    'BaseStorage',
 )

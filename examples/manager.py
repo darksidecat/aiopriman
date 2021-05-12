@@ -3,7 +3,7 @@ import logging
 from typing import Type
 
 import aiopriman
-from aiopriman.manager import Manager, LockManager, SemaphoreManager
+from aiopriman.manager import LockManager, Manager, SemaphoreManager
 
 
 async def run_lock(manager, name):
@@ -19,8 +19,8 @@ async def run_sem(manager, name):
     man: Type[SemaphoreManager] = manager.get(aiopriman.manager.Types.SEM)
 
     logging.debug(f"START {name}")
-    async with man(key="test", value=2) as lock:
-        logging.debug(f"HERE SEM LOCKED {name}: {lock}")
+    async with man(key="test", value=2) as sem:
+        logging.debug(f"HERE SEM LOCKED {name}: {sem}")
         await asyncio.sleep(3)
 
 

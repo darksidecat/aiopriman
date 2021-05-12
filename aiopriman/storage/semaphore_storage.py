@@ -6,13 +6,13 @@ from __future__ import annotations
 import logging
 
 from aiopriman.sync_primitives.semaphore import Semaphore
+from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
+                                        CantDeleteWithWaiters)
 
-from ..utils.exceptions import (CantDeleteSemaphoreWithAcquire,
-                                CantDeleteWithWaiters)
-from .base_storage import SyncPrimitiveStorage
+from .base_storage import BaseStorage
 
 
-class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
+class SemaphoreStorage(BaseStorage[Semaphore]):
     def get_sync_prim(self, key: str, value: int = 1) -> Semaphore:
         """
         Return Semaphore from storage,
@@ -32,7 +32,7 @@ class SemaphoreStorage(SyncPrimitiveStorage[Semaphore]):
 
         Semaphore with waiters can`t be deleted raise CantDeleteWithWaiters exception
         Semaphore with more than one acquire can`t be deleted
-        raise CantDeleteSemaphoreWithMoreThanOneAcquire exception
+        raise CantDeleteSemaphoreWithAcquire exception
 
         if key not found logging this
 

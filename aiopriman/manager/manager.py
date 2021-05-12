@@ -7,14 +7,15 @@ import inspect
 from functools import partial
 from typing import List, Optional, Type, TypeVar, Union, cast
 
-from ..storage import StorageData, SyncPrimitiveStorage
-from ..sync_primitives import SyncPrimitive
+from aiopriman.storage import BaseStorage, StorageData
+from aiopriman.sync_primitives import SyncPrimitive
+
 from .base_manager import BaseManager
 from .lock_manager import LockManager
 from .semaphore_manager import SemaphoreManager
 
 T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
-T_Storage = TypeVar('T_Storage', bound=SyncPrimitiveStorage[SyncPrimitive])
+T_Storage = TypeVar('T_Storage', bound=BaseStorage[SyncPrimitive])
 
 
 class Types:
@@ -71,4 +72,4 @@ class Manager:
                 Type[BaseManager[T_co, T_Storage]],
                 partial(man_type, storage_data=self.storage_data))
         else:
-            raise TypeError("man_type must be str or Type[BaseManager]")
+            raise TypeError("man_type must be str or BaseManager subclass")

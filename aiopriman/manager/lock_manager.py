@@ -3,36 +3,43 @@ Lock manager
 """
 from __future__ import annotations
 
-from types import TracebackType
-from typing import TYPE_CHECKING, Optional, Type
+from typing import TYPE_CHECKING, Any, Optional
 
-from ..storage import LockStorage
+from aiopriman.storage import LockStorage
+
 from .base_manager import BaseManager
+from .utils import _ContextManagerMixin
 
 if TYPE_CHECKING:  # pragma: no cover
+    from aiopriman.storage import StorageData
     from aiopriman.sync_primitives import Lock
 
-    from ..storage import StorageData
 
-
-class LockManager(BaseManager['Lock', 'LockStorage']):
+class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
     """
     Locks manager
     """
 
-    async def __aenter__(self) -> Lock:
-        self._current_lock: Lock = self.prim_storage.get_sync_prim(self._key)
+    def __init__(self, key: str = "Default", storage_data: Optional[StorageData[Lock]] = None):
+        super().__init__(key=key, storage_data=storage_data)
+        self._current_lock: Optional[Lock] = None
+
+    async def acquire(self, *args: Any, **kwargs: Any) -> Lock:
+        self._current_lock = self.prim_storage.get_sync_prim(self._key)
+        print(self._current_lock)
         await self._current_lock.lock.acquire()
         return self._current_lock
 
-    async def __aexit__(self,
-                        exc_type: Optional[Type[BaseException]],
-                        exc_value: Optional[BaseException],
-                        traceback: Optional[TracebackType]) -> None:
-        self._current_lock.lock.release()
-        if not self._current_lock.lock.locked() and \
-                not self._current_lock.waiters:
-            self.prim_storage.del_sync_prim(self._key)
+    def release(self, *args: Any, **kwargs: Any) -> None:
+        if not self._current_lock:
+            self._current_lock = self.prim_storage.get_sync_prim(self._key)
+
+        try:
+            self._current_lock.lock.release()
+        finally:
+            if (not self._current_lock.lock.locked() and
+                    not self._current_lock.waiters):
+                self.prim_storage.del_sync_prim(self._key)
 
     def resolve_storage(self, storage_data: StorageData[Lock]) -> LockStorage:
         return LockStorage(storage_data=storage_data)

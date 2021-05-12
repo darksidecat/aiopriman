@@ -132,3 +132,11 @@ async def test_sem_no_cant_find_key_warning_even(caplog):
                          task(sem_manager),
                          )
     assert 'Can`t find semaphore by key to delete' not in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_sem_release_deleting():
+    init_value = 2
+    sem_manager = SemaphoreManager(key="test", value=init_value)
+    sem_manager.release()
+    assert not sem_manager.prim_storage.sync_prims
