@@ -11,6 +11,8 @@ from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
 
 from .base_storage import BaseStorage
 
+logger = logging.getLogger(__name__)
+
 
 class SemaphoreStorage(BaseStorage[Semaphore]):
     def get_sync_prim(self, key: str, value: int = 1) -> Semaphore:
@@ -41,7 +43,7 @@ class SemaphoreStorage(BaseStorage[Semaphore]):
         """
         sem = self.sync_prims.get(self.resolve_key(self.prefix, key))
         if not sem:
-            logging.warning("Can`t find semaphore by key to delete %s" % key)
+            logger.warning("Can`t find semaphore by key to delete %s" % key)
             return
         elif sem and sem.waiters:
             raise CantDeleteWithWaiters("Can`t delete semaphore with waiters %s" % sem)
