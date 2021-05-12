@@ -26,7 +26,6 @@ class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
 
     async def acquire(self, *args: Any, **kwargs: Any) -> Lock:
         self._current_lock = self.prim_storage.get_sync_prim(self._key)
-        print(self._current_lock)
         await self._current_lock.lock.acquire()
         return self._current_lock
 
