@@ -17,8 +17,8 @@ class _ContextManagerMixin:
 
     @abstractmethod
     async def acquire(self, from_context_manager: bool) -> SyncPrimitive:
-        pass
+        """Acquire synchronization primitive"""
 
     @abstractmethod
     def release(self, from_context_manager: bool) -> None:
-        pass
+        """Release synchronization primitive"""

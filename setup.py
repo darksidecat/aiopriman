@@ -26,6 +26,7 @@ setup(
     license='MIT',
     description='library for managing asyncio synchronization primitives',
     long_description=get_description(),
+    long_description_content_type="text/markdown",
     author='darksidecat',
     author_email='bitalik371@gmail.com',
     url='https://github.com/darksidecat/aiopriman',
