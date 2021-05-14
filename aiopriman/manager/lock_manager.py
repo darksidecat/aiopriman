@@ -20,7 +20,11 @@ class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
     Locks manager
     """
 
-    def __init__(self, key: str = "Default", storage_data: Optional[StorageData[Lock]] = None):
+    def __init__(
+            self,
+            storage_data: StorageData[Lock],
+            key: str = "Default"
+    ):
         super().__init__(key=key, storage_data=storage_data)
         self._current_lock: Optional[Lock] = None
 

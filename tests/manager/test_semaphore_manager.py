@@ -8,21 +8,21 @@ from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
                                         CantDeleteWithWaiters)
 
 
-def test_sem_manager_without_context_empty():
-    sem_manager = SemaphoreManager()
+def test_sem_manager_without_context_empty(storage_data):
+    sem_manager = SemaphoreManager(storage_data)
     assert not sem_manager.prim_storage.sync_prims
 
 
-def test_sem_manager_without_context_add_lock():
-    sem_manager = SemaphoreManager()
+def test_sem_manager_without_context_add_lock(storage_data):
+    sem_manager = SemaphoreManager(storage_data)
     sem_manager.prim_storage.get_sync_prim(key="test")
     assert sem_manager.prim_storage.sync_prims
     assert "SemaphoreStorage:test" in sem_manager.prim_storage.sync_prims
 
 
 @pytest.mark.asyncio
-async def test_sem_manager_with_context():
-    sem_manager = SemaphoreManager(key="test")
+async def test_sem_manager_with_context(storage_data):
+    sem_manager = SemaphoreManager(storage_data, key="test")
     locks_acquire_result = []
     expected = [False, True, False]
 
@@ -35,7 +35,7 @@ async def test_sem_manager_with_context():
 
 
 @pytest.mark.asyncio
-async def test_sem_manager_raise_waiters_exc():
+async def test_sem_manager_raise_waiters_exc(storage_data):
     async def task(sem_manager):
         async with sem_manager:
             await asyncio.sleep(0.2)
@@ -49,14 +49,14 @@ async def test_sem_manager_raise_waiters_exc():
         with pytest.raises(CantDeleteWithWaiters):
             sem_manager.prim_storage.del_sync_prim("test")
 
-    sem_manager = SemaphoreManager(key="test")
+    sem_manager = SemaphoreManager(storage_data, key="test")
     await asyncio.gather(task(sem_manager),
                          task2(sem_manager),
                          task_del(sem_manager))
 
 
 @pytest.mark.asyncio
-async def test_sem_manager_raise_more_than_one_aquire():
+async def test_sem_manager_raise_more_than_one_aquire(storage_data):
     async def task(sem_manager):
         async with sem_manager:
             await asyncio.sleep(0.2)
@@ -70,22 +70,22 @@ async def test_sem_manager_raise_more_than_one_aquire():
         with pytest.raises(CantDeleteSemaphoreWithAcquire):
             sem_manager.prim_storage.del_sync_prim("test")
 
-    sem_manager = SemaphoreManager(key="test", value=2)
+    sem_manager = SemaphoreManager(storage_data, key="test", value=2)
     await asyncio.gather(task(sem_manager),
                          task2(sem_manager),
                          task_del(sem_manager))
 
 
-def test_sem_manager_log_miss_key(caplog):
-    sem_manager = SemaphoreManager()
+def test_sem_manager_log_miss_key(caplog, storage_data):
+    sem_manager = SemaphoreManager(storage_data)
     sem_manager.prim_storage.del_sync_prim("test")
     assert 'Can`t find semaphore by key to delete' in caplog.text
 
 
 @pytest.mark.asyncio
-async def test_sem_increasing_value():
+async def test_sem_increasing_value(storage_data):
     init_value = 2
-    sem_manager = SemaphoreManager(key="test", value=init_value)
+    sem_manager = SemaphoreManager(storage_data, key="test", value=init_value)
     async with sem_manager:
         sem: Semaphore = sem_manager.prim_storage.get_sync_prim(key="test")
         sem.semaphore.release()
@@ -94,9 +94,9 @@ async def test_sem_increasing_value():
 
 
 @pytest.mark.asyncio
-async def test_sem_increasing_value_more_than_one():
+async def test_sem_increasing_value_more_than_one(storage_data):
     init_value = 2
-    sem_manager = SemaphoreManager(key="test", value=init_value)
+    sem_manager = SemaphoreManager(storage_data, key="test", value=init_value)
     async with sem_manager:
         sem: Semaphore = sem_manager.prim_storage.get_sync_prim(key="test")
         sem.semaphore.release()
@@ -106,12 +106,12 @@ async def test_sem_increasing_value_more_than_one():
 
 
 @pytest.mark.asyncio
-async def test_sem_no_cant_find_key_warning_odd(caplog):
+async def test_sem_no_cant_find_key_warning_odd(caplog, storage_data):
     async def task(sem_manager):
         async with sem_manager:
             await asyncio.sleep(0.2)
 
-    sem_manager = SemaphoreManager(key="test", value=2)
+    sem_manager = SemaphoreManager(storage_data, key="test", value=2)
     await asyncio.gather(task(sem_manager),
                          task(sem_manager),
                          task(sem_manager),
@@ -120,12 +120,12 @@ async def test_sem_no_cant_find_key_warning_odd(caplog):
 
 
 @pytest.mark.asyncio
-async def test_sem_no_cant_find_key_warning_even(caplog):
+async def test_sem_no_cant_find_key_warning_even(caplog, storage_data):
     async def task(sem_manager):
         async with sem_manager:
             await asyncio.sleep(0.2)
 
-    sem_manager = SemaphoreManager(key="test", value=2)
+    sem_manager = SemaphoreManager(storage_data, key="test", value=2)
     await asyncio.gather(task(sem_manager),
                          task(sem_manager),
                          task(sem_manager),
@@ -135,8 +135,8 @@ async def test_sem_no_cant_find_key_warning_even(caplog):
 
 
 @pytest.mark.asyncio
-async def test_sem_release_deleting():
+async def test_sem_release_deleting(storage_data):
     init_value = 2
-    sem_manager = SemaphoreManager(key="test", value=init_value)
+    sem_manager = SemaphoreManager(storage_data, key="test", value=init_value)
     sem_manager.release()
     assert not sem_manager.prim_storage.sync_prims

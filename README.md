@@ -22,34 +22,27 @@ Primitives are stored in memory only when needed.
 
 # Usage Examples
 
-
-### Work via Manager with shared storage data
+### Working with a specific type of Manager, storage data must be specified as a parameter
 ```python3
 import asyncio
 import logging
-from typing import Type
 
-from aiopriman.manager import Manager, Types, LockManager, SemaphoreManager
-
-
-async def task_lock(manager):
-    lock_man: Type[LockManager] = manager.get(Types.LOCK)  # get LockManager with shared storage
-
-    logging.debug(manager.storage_data)
-    async with lock_man(key='lock_key') as lock:  # acquire lock for given key
-        logging.debug(f"HERE LOCKED: {lock}")
-        await asyncio.sleep(0.5)
-    logging.debug(manager.storage_data)
+from aiopriman.manager import LockManager, SemaphoreManager
+from aiopriman.storage import StorageData
 
 
-async def task_sem(manager):
-    sem_man: Type[SemaphoreManager] = manager.get(Types.SEM)  # get SemaphoreManager with shared storage
+async def run_lock(storage, name):
+    logging.debug(f"START Lock {name}")
+    async with LockManager(storage_data=storage, key="test") as lock:
+        logging.debug(f"HERE LOCKED {name}: {lock}")
+        await asyncio.sleep(3)
 
-    logging.debug(manager.storage_data)
-    async with sem_man(key='sem_key', value=2) as sem: # acquire semaphore lock for given key
-        logging.debug(f"HERE SEM LOCK: {sem}")
-        await asyncio.sleep(0.5)
-    logging.debug(manager.storage_data)
+
+async def run_sem(storage, name):
+    logging.debug(f"START Sem {name}")
+    async with SemaphoreManager(storage_data=storage,  key="test", value=2) as sem:
+        logging.debug(f"HERE SEM LOCKED {name}: {sem}")
+        await asyncio.sleep(3)
 
 
 async def main_run(*args):
@@ -63,47 +56,16 @@ if __name__ == '__main__':
     )
 
     tasks = []
-    manager = Manager()  # initiate manager with shared storage
+    storage_data = StorageData()
     for i in range(1, 10):
-        tasks.append(task_lock(manager))
-        tasks.append(task_sem(manager))
+        tasks.append(run_lock(storage_data, i))
+        tasks.append(run_sem(storage_data, i))
 
     asyncio.run(
         main_run(
            *tasks
         )
     )
-
-```
-
-### Working with a specific type of Manager, storage data must be specified as a parameter
-```python3
-import asyncio
-from aiopriman.manager import LockManager, SemaphoreManager
-from aiopriman.storage import StorageData
-
-
-async def main():
-    lock_man = LockManager(storage_data=storage_data, key="test")
-    sem_man = SemaphoreManager(storage_data=storage_data, key="test", value=2)
-
-    async with lock_man:
-        async with sem_man:
-            print(storage_data)
-            #  {'LockStorage:test': Lock(key=LockStorage:test,
-            #                       value=<asyncio.locks.Lock object at 0x000002D8F468E580 [locked]>),
-            #  'SemaphoreStorage:test': Semaphore(key=SemaphoreStorage:test,
-            #                           value=<asyncio.locks.Semaphore object at 0x000002D8F468E760
-            #                           [unlocked, value:1]>, pending=1)}
-
-    async with LockManager(key="test", storage_data=storage_data):
-        #  or like this
-        pass
-
-
-if __name__ == '__main__':
-    storage_data = StorageData()
-    asyncio.run(main())
 
 
 ```

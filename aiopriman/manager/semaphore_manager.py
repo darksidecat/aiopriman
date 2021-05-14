@@ -22,8 +22,8 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextMan
 
     def __init__(
             self,
+            storage_data: StorageData[Semaphore],
             key: str = "Default",
-            storage_data: Optional[StorageData[Semaphore]] = None,
             value: int = 1
     ):
         """

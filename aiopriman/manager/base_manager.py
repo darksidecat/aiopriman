@@ -4,7 +4,7 @@ Abstract asyncio synchronization primitives manager
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Generic, Optional, TypeVar
+from typing import Generic, TypeVar
 
 from aiopriman.storage import BaseStorage, StorageData
 from aiopriman.sync_primitives import SyncPrimitive
@@ -22,12 +22,12 @@ class BaseManager(ABC, Generic[T_co, T_Storage]):
         T_Storage : subclass of SyncPrimitiveStorage
     """
 
-    def __init__(self, key: str = "Default", storage_data: Optional[StorageData[T_co]] = None):
+    def __init__(self, storage_data: StorageData[T_co],  key: str = "Default"):
         """
         :param key: Key for managing sync primitive
         :param storage_data: StorageData
         """
-        self.storage_data = storage_data if storage_data is not None else StorageData()
+        self.storage_data = storage_data
         self.prim_storage: T_Storage = self.resolve_storage(self.storage_data)
         self._key = key
 
