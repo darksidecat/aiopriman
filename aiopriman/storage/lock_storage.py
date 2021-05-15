@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import logging
 
-from aiopriman.sync_primitives.lock import Lock
+from aiopriman.sync_primitives import Lock
 from aiopriman.utils.exceptions import CantDeleteWithWaiters
 
 from .base_storage import BaseStorage
@@ -28,7 +28,9 @@ class LockStorage(BaseStorage[Lock]):
     def del_sync_prim(self, key: str) -> None:
         """
         Delete lock from storage,
-        if key can`t be deleted raise CantDeleteWithWaiters exception
+
+        raise CantDeleteWithWaiters exception
+
         if key not found logging this
 
         :param key: key
@@ -36,9 +38,9 @@ class LockStorage(BaseStorage[Lock]):
         """
         lock = self.sync_prims.get(self.resolve_key(self.prefix, key))
         if not lock:
-            logger.warning("Can`t find lock by key to delete %s" % key)
+            logger.warning("Can`t find Lock by key to delete %s" % key)
             return
         elif lock and lock.waiters:
-            raise CantDeleteWithWaiters("Can`t delete lock with waiters %s" % lock)
+            raise CantDeleteWithWaiters("Can`t delete Lock with waiters %s" % lock)
         else:
             del self.sync_prims[self.resolve_key(self.prefix, key)]

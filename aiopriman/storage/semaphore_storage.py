@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import logging
 
-from aiopriman.sync_primitives.semaphore import Semaphore
+from aiopriman.sync_primitives import Semaphore
 from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
                                         CantDeleteWithWaiters)
 
@@ -18,7 +18,7 @@ class SemaphoreStorage(BaseStorage[Semaphore]):
     def get_sync_prim(self, key: str, value: int = 1) -> Semaphore:
         """
         Return Semaphore from storage,
-        if key not exist in storage then create lock
+        if key not exist in storage then create Semaphore
 
         :param key: key
         :param value: Semaphore internal counter, defaults to 1
@@ -32,8 +32,7 @@ class SemaphoreStorage(BaseStorage[Semaphore]):
         """
         Delete semaphore from storage,
 
-        Semaphore with waiters can`t be deleted raise CantDeleteWithWaiters exception
-        Semaphore with more than one acquire can`t be deleted
+        raise CantDeleteWithWaiters exception
         raise CantDeleteSemaphoreWithAcquire exception
 
         if key not found logging this
@@ -43,12 +42,12 @@ class SemaphoreStorage(BaseStorage[Semaphore]):
         """
         sem = self.sync_prims.get(self.resolve_key(self.prefix, key))
         if not sem:
-            logger.warning("Can`t find semaphore by key to delete %s" % key)
+            logger.warning("Can`t find Semaphore by key to delete %s" % key)
             return
         elif sem and sem.waiters:
-            raise CantDeleteWithWaiters("Can`t delete semaphore with waiters %s" % sem)
+            raise CantDeleteWithWaiters("Can`t delete Semaphore with waiters %s" % sem)
         elif sem and sem.value != sem.init_value:
             raise CantDeleteSemaphoreWithAcquire(
-                "Can`t delete semaphore with acquire %s" % sem)
+                "Can`t delete Semaphore with acquire %s" % sem)
         else:
             del self.sync_prims[self.resolve_key(self.prefix, key)]

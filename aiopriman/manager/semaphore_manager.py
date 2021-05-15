@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextManagerMixin):
     """
-    Semaphore manager
+    Semaphores manager
     """
 
     def __init__(
@@ -27,7 +27,7 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextMan
             value: int = 1
     ):
         """
-        :param key: Key for managing semaphore
+        :param key: Key for managing Semaphore
         :param storage_data: StorageData
         :param value: Semaphore internal counter, defaults to 1
         """

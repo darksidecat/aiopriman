@@ -57,7 +57,7 @@ async def test_lock_manager_raise_waiters_exc(storage_data):
 async def test_lock_manager_log_miss_key(caplog, storage_data):
     lock_manager = LockManager(storage_data)
     lock_manager.prim_storage.del_sync_prim("test")
-    assert 'Can`t find lock by key to delete' in caplog.text
+    assert 'Can`t find Lock by key to delete' in caplog.text
 
 
 @pytest.mark.asyncio
