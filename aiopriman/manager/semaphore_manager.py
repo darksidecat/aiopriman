@@ -75,3 +75,14 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextMan
 
     def resolve_storage(self, storage_data: StorageData[Semaphore]) -> SemaphoreStorage:
         return SemaphoreStorage(storage_data=storage_data)
+
+
+def semaphore_lock(func):
+    async def wrapped(*args, **kwargs):
+        storage_data = kwargs.get('storage_data')
+        if storage_data is None:
+            raise ValueError("decorated function need keyword storage_data param")
+        async with SemaphoreManager(**kwargs):
+            return await func(*args, **kwargs)
+
+    return wrapped
