@@ -67,3 +67,12 @@ async def test_lock_manager_release_first(storage_data):
         lock_manager.release()
 
     assert not lock_manager.storage_data
+
+
+@pytest.mark.asyncio
+async def test_lock_manager_locked(storage_data):
+    lock_manager = LockManager(storage_data, key="test")
+    assert not lock_manager.locked()
+    async with lock_manager:
+        assert lock_manager.locked()
+    assert not lock_manager.locked()

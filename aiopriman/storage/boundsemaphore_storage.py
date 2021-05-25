@@ -4,6 +4,7 @@ BoundedSemaphores storage
 from __future__ import annotations
 
 import logging
+from typing import Optional
 
 from aiopriman.sync_primitives import BoundedSemaphore
 from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
@@ -15,6 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 class BoundSemaphoreStorage(BaseStorage[BoundedSemaphore]):
+    def locked(self, key: str) -> bool:
+        sem: Optional[BoundedSemaphore] = self.sync_prims.get(self.resolve_key(self.prefix, key))
+        if sem and sem.semaphore.locked():
+            return True
+        return False
+
     def get_sync_prim(self, key: str, value: int = 1) -> BoundedSemaphore:
         """
         Return BoundedSemaphore from storage,

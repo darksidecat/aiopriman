@@ -4,6 +4,7 @@ Semaphores storage
 from __future__ import annotations
 
 import logging
+from typing import Optional
 
 from aiopriman.sync_primitives import Semaphore
 from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
@@ -15,6 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 class SemaphoreStorage(BaseStorage[Semaphore]):
+    def locked(self, key: str) -> bool:
+        sem: Optional[Semaphore] = self.sync_prims.get(self.resolve_key(self.prefix, key))
+        if sem and sem.semaphore.locked():
+            return True
+        return False
+
     def get_sync_prim(self, key: str, value: int = 1) -> Semaphore:
         """
         Return Semaphore from storage,

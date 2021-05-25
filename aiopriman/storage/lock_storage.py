@@ -4,6 +4,7 @@ Locks storage
 from __future__ import annotations
 
 import logging
+from typing import Optional
 
 from aiopriman.sync_primitives import Lock
 from aiopriman.utils.exceptions import CantDeleteWithWaiters
@@ -14,6 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 class LockStorage(BaseStorage[Lock]):
+    def locked(self, key: str) -> bool:
+        lock: Optional[Lock] = self.sync_prims.get(self.resolve_key(self.prefix, key))
+        if lock and lock.lock.locked():
+            return True
+        return False
+
     def get_sync_prim(self, key: str) -> Lock:
         """
         Return Lock from storage,
@@ -39,8 +46,7 @@ class LockStorage(BaseStorage[Lock]):
         lock = self.sync_prims.get(self.resolve_key(self.prefix, key))
         if not lock:
             logger.warning("Can`t find Lock by key to delete %s" % key)
-            return
-        elif lock and lock.waiters:
+        elif lock.waiters:
             raise CantDeleteWithWaiters("Can`t delete Lock with waiters %s" % lock)
         else:
             del self.sync_prims[self.resolve_key(self.prefix, key)]

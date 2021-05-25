@@ -140,3 +140,12 @@ async def test_sem_release_deleting(storage_data):
     sem_manager = SemaphoreManager(storage_data, key="test", value=init_value)
     sem_manager.release()
     assert not sem_manager.prim_storage.sync_prims
+
+
+@pytest.mark.asyncio
+async def test_sem_manager_locked(storage_data):
+    sem_manager = SemaphoreManager(storage_data, key="test")
+    assert not sem_manager.locked()
+    async with sem_manager:
+        assert sem_manager.locked()
+    assert not sem_manager.locked()

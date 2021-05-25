@@ -44,5 +44,8 @@ class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
                     not self._current_lock.waiters):
                 self.prim_storage.del_sync_prim(self._key)
 
+    def locked(self) -> bool:
+        return self.prim_storage.locked(self._key)
+
     def resolve_storage(self, storage_data: StorageData[Lock]) -> LockStorage:
         return LockStorage(storage_data=storage_data)

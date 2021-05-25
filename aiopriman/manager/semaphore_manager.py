@@ -70,5 +70,8 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextMan
                 self._current_semaphore.pending == 0):
             self.prim_storage.del_sync_prim(self._key)
 
+    def locked(self) -> bool:
+        return self.prim_storage.locked(self._key)
+
     def resolve_storage(self, storage_data: StorageData[Semaphore]) -> SemaphoreStorage:
         return SemaphoreStorage(storage_data=storage_data)
