@@ -3,7 +3,6 @@ Lock manager
 """
 from __future__ import annotations
 
-from functools import wraps
 from typing import TYPE_CHECKING, Any, Optional
 
 from aiopriman.storage import LockStorage
@@ -50,19 +49,3 @@ class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
 
     def resolve_storage(self, storage_data: StorageData[Lock]) -> LockStorage:
         return LockStorage(storage_data=storage_data)
-
-
-def lock(func):
-    @wraps(func)
-    async def wrapped(*args, **kwargs):
-        storage_data = kwargs.get('storage_data')
-        if storage_data is None:
-            raise ValueError("decorated function need keyword storage_data param")
-
-        man_params = inspect_params(LockManager, **kwargs)
-        func_params = inspect_params(func, **kwargs)
-
-        async with LockManager(**man_params):
-            return await func(*args, **func_params)
-
-    return wrapped

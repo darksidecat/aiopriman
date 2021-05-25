@@ -1,7 +1,8 @@
 import inspect
 from abc import abstractmethod
+from functools import wraps
 from types import TracebackType
-from typing import Optional, Type
+from typing import Optional, Type, Any, Dict
 
 from aiopriman.sync_primitives import SyncPrimitive
 
@@ -25,7 +26,7 @@ class _ContextManagerMixin:
         """Release synchronization primitive"""
 
 
-def inspect_params(obj, **kwargs):
+def inspect_params(obj: Any, **kwargs: Any) -> Dict[str, Any]:
     payload = {}
     man_params = inspect.signature(obj).parameters.keys()
 
@@ -34,3 +35,24 @@ def inspect_params(obj, **kwargs):
             payload[k] = v
 
     return payload
+
+
+def lock(manager, storage_data=None, **dec_kwargs):
+    def decorator(func):
+
+        @wraps(func)
+        async def wrapped(*args, **kwargs):
+            func_storage_data = kwargs.get('storage_data')
+            storage_data_ = func_storage_data if func_storage_data is not None else storage_data
+            if storage_data_ is None:
+                raise ValueError("decorated function need keyword storage_data param")
+
+            kwargs = {**dec_kwargs, **kwargs, "storage_data": storage_data_}
+            man_params = inspect_params(manager, **kwargs)
+            func_params = inspect_params(func, **kwargs)
+
+            async with manager(**man_params):
+                return await func(*args, **func_params)
+
+        return wrapped
+    return decorator

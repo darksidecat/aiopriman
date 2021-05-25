@@ -3,7 +3,6 @@ Semaphore manager
 """
 from __future__ import annotations
 
-from functools import wraps
 from typing import TYPE_CHECKING, Optional
 
 from aiopriman.storage import SemaphoreStorage
@@ -76,20 +75,3 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextMan
 
     def resolve_storage(self, storage_data: StorageData[Semaphore]) -> SemaphoreStorage:
         return SemaphoreStorage(storage_data=storage_data)
-
-
-def semaphore_lock(func):
-    @wraps(func)
-    async def wrapped(*args, **kwargs):
-        storage_data = kwargs.get('storage_data')
-        if storage_data is None:
-            raise ValueError("decorated function need keyword storage_data param")
-
-        man_params = inspect_params(SemaphoreManager, **kwargs)
-        func_params = inspect_params(func, **kwargs)
-
-        async with SemaphoreManager(**man_params):
-            return await func(*args, **func_params)
-
-    return wrapped
-

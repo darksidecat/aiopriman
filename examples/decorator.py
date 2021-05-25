@@ -1,18 +1,20 @@
 import asyncio
 import logging
 
-from aiopriman.manager.lock_manager import lock
-from aiopriman.manager.semaphore_manager import semaphore_lock
+from aiopriman.manager import LockManager, SemaphoreManager
+from aiopriman.manager.utils import lock
 from aiopriman.storage import StorageData
 
+storage_data = StorageData()
 
-@lock
+
+@lock(LockManager, key="test2")
 async def run_lock(name):
     logging.debug(f"HERE LOCKED {name}")
     await asyncio.sleep(3)
 
 
-@semaphore_lock
+@lock(SemaphoreManager, storage_data=storage_data, value=5)
 async def run_sem(name):
     logging.debug(f"HERE SEM LOCKED {name}")
     await asyncio.sleep(3)
@@ -32,7 +34,7 @@ if __name__ == '__main__':
     storage_data = StorageData()
     for i in range(1, 10):
         tasks.append(run_lock(i, storage_data=storage_data,  key="test"))
-        tasks.append(run_sem(i, storage_data=storage_data, key="test", value=2))
+        tasks.append(run_sem(i, key="test_sem", value=2))
 
     asyncio.run(
         main_run(
