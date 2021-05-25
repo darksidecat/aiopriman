@@ -1,3 +1,4 @@
+import inspect
 from abc import abstractmethod
 from types import TracebackType
 from typing import Optional, Type
@@ -22,3 +23,14 @@ class _ContextManagerMixin:
     @abstractmethod
     def release(self, from_context_manager: bool) -> None:
         """Release synchronization primitive"""
+
+
+def inspect_params(obj, **kwargs):
+    payload = {}
+    man_params = inspect.signature(obj).parameters.keys()
+
+    for k, v in kwargs.items():
+        if k in man_params:
+            payload[k] = v
+
+    return payload

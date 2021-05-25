@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Optional
 from aiopriman.storage import LockStorage
 
 from .base_manager import BaseManager
-from .utils import _ContextManagerMixin
+from .utils import _ContextManagerMixin, inspect_params
 
 if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.storage import StorageData
@@ -53,11 +53,16 @@ class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
 
 
 def lock(func):
+    @wraps(func)
     async def wrapped(*args, **kwargs):
         storage_data = kwargs.get('storage_data')
         if storage_data is None:
             raise ValueError("decorated function need keyword storage_data param")
-        async with LockManager(**kwargs):
-            return await func(*args, **kwargs)
+
+        man_params = inspect_params(LockManager, **kwargs)
+        func_params = inspect_params(func, **kwargs)
+
+        async with LockManager(**man_params):
+            return await func(*args, **func_params)
 
     return wrapped

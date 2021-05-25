@@ -7,13 +7,13 @@ from aiopriman.storage import StorageData
 
 
 @lock
-async def run_lock(name, storage_data, **kwargs):
+async def run_lock(name):
     logging.debug(f"HERE LOCKED {name}")
     await asyncio.sleep(3)
 
 
 @semaphore_lock
-async def run_sem(name,storage_data, **kwargs):
+async def run_sem(name):
     logging.debug(f"HERE SEM LOCKED {name}")
     await asyncio.sleep(3)
 

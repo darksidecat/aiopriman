@@ -3,12 +3,13 @@ Semaphore manager
 """
 from __future__ import annotations
 
+from functools import wraps
 from typing import TYPE_CHECKING, Optional
 
 from aiopriman.storage import SemaphoreStorage
 
 from .base_manager import BaseManager
-from .utils import _ContextManagerMixin
+from .utils import _ContextManagerMixin, inspect_params
 
 if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.storage import StorageData
@@ -78,11 +79,17 @@ class SemaphoreManager(BaseManager['Semaphore', 'SemaphoreStorage'], _ContextMan
 
 
 def semaphore_lock(func):
+    @wraps(func)
     async def wrapped(*args, **kwargs):
         storage_data = kwargs.get('storage_data')
         if storage_data is None:
             raise ValueError("decorated function need keyword storage_data param")
-        async with SemaphoreManager(**kwargs):
-            return await func(*args, **kwargs)
+
+        man_params = inspect_params(SemaphoreManager, **kwargs)
+        func_params = inspect_params(func, **kwargs)
+
+        async with SemaphoreManager(**man_params):
+            return await func(*args, **func_params)
 
     return wrapped
+
