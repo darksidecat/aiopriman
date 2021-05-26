@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Optional
 from aiopriman.storage import SemaphoreStorage
 
 from .base_manager import BaseManager
-from .utils import _ContextManagerMixin, inspect_params
+from .utils import _ContextManagerMixin
 
 if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.storage import StorageData
