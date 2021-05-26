@@ -41,14 +41,16 @@ def lock(
         ) -> Any:
             dec_storage_data = dec_kwargs.get('storage_data')
             func_storage_data = kwargs.get('storage_data')
-            if dec_storage_data is None and func_storage_data is None:
+
+            storage_data = func_storage_data if func_storage_data is not None else dec_storage_data
+            if storage_data is None:
                 raise ValueError("decorated function need keyword param storage_data")
 
             kwargs = {**dec_kwargs, **kwargs}
-            man_params = inspect_params(manager, **kwargs)
+            man_params = inspect_params(manager, skip=['storage_data', ], **kwargs)
             func_params = inspect_params(func, **kwargs)
 
-            async with manager(**man_params):
+            async with manager(storage_data, **man_params):
                 return await func(*args, **func_params)
 
         return wrapped
