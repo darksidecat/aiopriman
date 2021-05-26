@@ -1,14 +1,14 @@
 import inspect
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional
 
 
-def _get_spec(func: callable):
+def _get_spec(func: Any) -> inspect.FullArgSpec:
     while hasattr(func, '__wrapped__'):  # Try to resolve decorated callbacks
         func = func.__wrapped__
     return inspect.getfullargspec(func)
 
 
-def _check_spec(spec: inspect.FullArgSpec, kwargs: dict):
+def _check_spec(spec: inspect.FullArgSpec, kwargs: Dict[str, Any]) -> Dict[str, Any]:
     if spec.varkw:
         return kwargs
 
