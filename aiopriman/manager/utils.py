@@ -28,26 +28,26 @@ class _ContextManagerMixin:
 
 def inspect_params(obj: Any, **kwargs: Any) -> Dict[str, Any]:
     payload = {}
-    man_params = inspect.signature(obj).parameters.keys()
+    params = inspect.signature(obj).parameters.keys()
 
     for k, v in kwargs.items():
-        if k in man_params:
+        if k in params:
             payload[k] = v
 
     return payload
 
 
-def lock(manager, storage_data=None, **dec_kwargs):
+def lock(manager, **dec_kwargs):
     def decorator(func):
 
         @wraps(func)
         async def wrapped(*args, **kwargs):
+            dec_storage_data = dec_kwargs.get('storage_data')
             func_storage_data = kwargs.get('storage_data')
-            storage_data_ = func_storage_data if func_storage_data is not None else storage_data
-            if storage_data_ is None:
-                raise ValueError("decorated function need keyword storage_data param")
+            if dec_storage_data is None and func_storage_data is None:
+                raise ValueError("decorated function need keyword param storage_data")
 
-            kwargs = {**dec_kwargs, **kwargs, "storage_data": storage_data_}
+            kwargs = {**dec_kwargs, **kwargs}
             man_params = inspect_params(manager, **kwargs)
             func_params = inspect_params(func, **kwargs)
 

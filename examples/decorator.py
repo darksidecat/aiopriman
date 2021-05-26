@@ -15,7 +15,7 @@ async def run_lock(name):
 
 
 @lock(SemaphoreManager, storage_data=storage_data, value=5)
-async def run_sem(name):
+async def run_sem(name, storage_data):
     logging.debug(f"HERE SEM LOCKED {name}")
     await asyncio.sleep(3)
 
