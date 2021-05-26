@@ -47,10 +47,11 @@ def lock(
                 raise ValueError("decorated function need keyword param storage_data")
 
             kwargs = {**dec_kwargs, **kwargs}
-            man_params = inspect_params(manager, skip=['storage_data', ], **kwargs)
+
+            man_params = inspect_params(manager, **kwargs)
             func_params = inspect_params(func, **kwargs)
 
-            async with manager(storage_data, **man_params):
+            async with manager(**man_params):
                 return await func(*args, **func_params)
 
         return wrapped
