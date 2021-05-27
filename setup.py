@@ -22,7 +22,7 @@ def get_description():
 setup(
     name='aiopriman',
     packages=find_packages(exclude=('tests', 'tests.*', 'examples.*', 'docs',)),
-    version='0.2.2',
+    version='0.2.3',
     license='MIT',
     description='library for managing asyncio synchronization primitives',
     long_description=get_description(),
