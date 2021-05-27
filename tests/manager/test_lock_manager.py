@@ -48,16 +48,16 @@ async def test_lock_manager_raise_waiters_exc(storage_data):
             lock_manager.prim_storage.del_sync_prim("test")
 
     lock_manager = LockManager(storage_data, key="test")
-    await asyncio.gather(task(lock_manager),
-                         task2(lock_manager),
-                         task_del(lock_manager))
+    await asyncio.gather(
+        task(lock_manager), task2(lock_manager), task_del(lock_manager)
+    )
 
 
 @pytest.mark.asyncio
 async def test_lock_manager_log_miss_key(caplog, storage_data):
     lock_manager = LockManager(storage_data)
     lock_manager.prim_storage.del_sync_prim("test")
-    assert 'Can`t find Lock by key to delete' in caplog.text
+    assert "Can`t find Lock by key to delete" in caplog.text
 
 
 @pytest.mark.asyncio

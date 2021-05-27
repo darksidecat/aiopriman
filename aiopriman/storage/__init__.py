@@ -4,9 +4,9 @@ from .lock_storage import LockStorage
 from .semaphore_storage import SemaphoreStorage
 
 __all__ = (
-    'BoundSemaphoreStorage',
-    'LockStorage',
-    'SemaphoreStorage',
-    'StorageData',
-    'BaseStorage',
+    "BoundSemaphoreStorage",
+    "LockStorage",
+    "SemaphoreStorage",
+    "StorageData",
+    "BaseStorage",
 )

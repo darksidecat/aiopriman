@@ -15,16 +15,12 @@ if TYPE_CHECKING:  # pragma: no cover
     from aiopriman.sync_primitives import Lock
 
 
-class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
+class LockManager(BaseManager["Lock", "LockStorage"], _ContextManagerMixin):
     """
     Locks manager
     """
 
-    def __init__(
-            self,
-            storage_data: StorageData[Lock],
-            key: str = "Default"
-    ):
+    def __init__(self, storage_data: StorageData[Lock], key: str = "Default"):
         super().__init__(key=key, storage_data=storage_data)
         self._current_lock: Optional[Lock] = None
 
@@ -40,8 +36,7 @@ class LockManager(BaseManager['Lock', 'LockStorage'], _ContextManagerMixin):
         try:
             self._current_lock.lock.release()
         finally:
-            if (not self._current_lock.lock.locked() and
-                    not self._current_lock.waiters):
+            if not self._current_lock.lock.locked() and not self._current_lock.waiters:
                 self.prim_storage.del_sync_prim(self._key)
 
     def locked(self) -> bool:

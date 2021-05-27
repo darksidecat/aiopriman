@@ -3,8 +3,10 @@ import asyncio
 import pytest
 
 from aiopriman.manager import BoundSemaphoreManager
-from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
-                                        CantDeleteWithWaiters)
+from aiopriman.utils.exceptions import (
+    CantDeleteSemaphoreWithAcquire,
+    CantDeleteWithWaiters,
+)
 
 
 def test_sem_manager_without_context_empty(storage_data):
@@ -49,9 +51,7 @@ async def test_sem_manager_raise_waiters_exc(storage_data):
             sem_manager.prim_storage.del_sync_prim("test")
 
     sem_manager = BoundSemaphoreManager(storage_data, key="test")
-    await asyncio.gather(task(sem_manager),
-                         task2(sem_manager),
-                         task_del(sem_manager))
+    await asyncio.gather(task(sem_manager), task2(sem_manager), task_del(sem_manager))
 
 
 @pytest.mark.asyncio
@@ -70,15 +70,13 @@ async def test_sem_manager_raise_more_than_one_aquire(storage_data):
             sem_manager.prim_storage.del_sync_prim("test")
 
     sem_manager = BoundSemaphoreManager(storage_data, key="test", value=2)
-    await asyncio.gather(task(sem_manager),
-                         task2(sem_manager),
-                         task_del(sem_manager))
+    await asyncio.gather(task(sem_manager), task2(sem_manager), task_del(sem_manager))
 
 
 def test_sem_manager_log_miss_key(caplog, storage_data):
     sem_manager = BoundSemaphoreManager(storage_data)
     sem_manager.prim_storage.del_sync_prim("test")
-    assert 'Can`t find BoundedSemaphore by key to delete' in caplog.text
+    assert "Can`t find BoundedSemaphore by key to delete" in caplog.text
 
 
 @pytest.mark.asyncio
@@ -88,11 +86,12 @@ async def test_sem_no_cant_find_key_warning_odd(caplog, storage_data):
             await asyncio.sleep(0.2)
 
     sem_manager = BoundSemaphoreManager(storage_data, key="test", value=2)
-    await asyncio.gather(task(sem_manager),
-                         task(sem_manager),
-                         task(sem_manager),
-                         )
-    assert 'Can`t find BoundedSemaphore by key to delete' not in caplog.text
+    await asyncio.gather(
+        task(sem_manager),
+        task(sem_manager),
+        task(sem_manager),
+    )
+    assert "Can`t find BoundedSemaphore by key to delete" not in caplog.text
 
 
 @pytest.mark.asyncio
@@ -102,12 +101,13 @@ async def test_sem_no_cant_find_key_warning_even(caplog, storage_data):
             await asyncio.sleep(0.2)
 
     sem_manager = BoundSemaphoreManager(storage_data, key="test", value=2)
-    await asyncio.gather(task(sem_manager),
-                         task(sem_manager),
-                         task(sem_manager),
-                         task(sem_manager),
-                         )
-    assert 'Can`t find BoundedSemaphore by key to delete' not in caplog.text
+    await asyncio.gather(
+        task(sem_manager),
+        task(sem_manager),
+        task(sem_manager),
+        task(sem_manager),
+    )
+    assert "Can`t find BoundedSemaphore by key to delete" not in caplog.text
 
 
 @pytest.mark.asyncio

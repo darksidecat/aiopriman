@@ -29,8 +29,9 @@ class LockStorage(BaseStorage[Lock]):
         :param key: key
         :return: Lock
         """
-        return self.sync_prims.setdefault(self.resolve_key(self.prefix, key),
-                                          Lock(self.resolve_key(self.prefix, key)))
+        return self.sync_prims.setdefault(
+            self.resolve_key(self.prefix, key), Lock(self.resolve_key(self.prefix, key))
+        )
 
     def del_sync_prim(self, key: str) -> None:
         """

@@ -4,8 +4,8 @@ from .semaphore import Semaphore
 from .sync_primitive import SyncPrimitive
 
 __all__ = (
-    'BoundedSemaphore',
-    'Lock',
-    'Semaphore',
-    'SyncPrimitive',
+    "BoundedSemaphore",
+    "Lock",
+    "Semaphore",
+    "SyncPrimitive",
 )

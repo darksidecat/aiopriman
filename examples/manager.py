@@ -14,7 +14,7 @@ async def run_lock(storage, name):
 
 async def run_sem(storage, name):
     logging.debug(f"START Sem {name}")
-    async with SemaphoreManager(storage_data=storage,  key="test", value=2) as sem:
+    async with SemaphoreManager(storage_data=storage, key="test", value=2) as sem:
         logging.debug(f"HERE SEM LOCKED {name}: {sem}")
         await asyncio.sleep(3)
 
@@ -23,10 +23,10 @@ async def main_run(*args):
     await asyncio.gather(*args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG,
-        format='%(levelname)s:%(name)s:(%(filename)s).%(funcName)s(%(lineno)d):%(message)s'
+        format="%(levelname)s:%(name)s:(%(filename)s).%(funcName)s(%(lineno)d):%(message)s",
     )
 
     tasks = []
@@ -35,8 +35,4 @@ if __name__ == '__main__':
         tasks.append(run_lock(storage_data, i))
         tasks.append(run_sem(storage_data, i))
 
-    asyncio.run(
-        main_run(
-           *tasks
-        )
-    )
+    asyncio.run(main_run(*tasks))

@@ -7,8 +7,10 @@ import logging
 from typing import Optional
 
 from aiopriman.sync_primitives import Semaphore
-from aiopriman.utils.exceptions import (CantDeleteSemaphoreWithAcquire,
-                                        CantDeleteWithWaiters)
+from aiopriman.utils.exceptions import (
+    CantDeleteSemaphoreWithAcquire,
+    CantDeleteWithWaiters,
+)
 
 from .base_storage import BaseStorage
 
@@ -17,7 +19,9 @@ logger = logging.getLogger(__name__)
 
 class SemaphoreStorage(BaseStorage[Semaphore]):
     def locked(self, key: str) -> bool:
-        sem: Optional[Semaphore] = self.sync_prims.get(self.resolve_key(self.prefix, key))
+        sem: Optional[Semaphore] = self.sync_prims.get(
+            self.resolve_key(self.prefix, key)
+        )
         if sem and sem.semaphore.locked():
             return True
         return False
@@ -31,9 +35,10 @@ class SemaphoreStorage(BaseStorage[Semaphore]):
         :param value: Semaphore internal counter, defaults to 1
         :return: Semaphore
         """
-        return self.sync_prims.setdefault(self.resolve_key(self.prefix, key),
-                                          Semaphore(self.resolve_key(self.prefix, key),
-                                                    value=value))
+        return self.sync_prims.setdefault(
+            self.resolve_key(self.prefix, key),
+            Semaphore(self.resolve_key(self.prefix, key), value=value),
+        )
 
     def del_sync_prim(self, key: str) -> None:
         """
@@ -55,6 +60,7 @@ class SemaphoreStorage(BaseStorage[Semaphore]):
             raise CantDeleteWithWaiters("Can`t delete Semaphore with waiters %s" % sem)
         elif sem and sem.value != sem.init_value:
             raise CantDeleteSemaphoreWithAcquire(
-                "Can`t delete Semaphore with acquire %s" % sem)
+                "Can`t delete Semaphore with acquire %s" % sem
+            )
         else:
             del self.sync_prims[self.resolve_key(self.prefix, key)]

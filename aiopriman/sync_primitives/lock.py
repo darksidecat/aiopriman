@@ -33,10 +33,7 @@ class Lock(SyncPrimitive):
         return self.lock._waiters  # type: ignore
 
     def __repr__(self) -> str:
-        return str("Lock(key={key}, value={lock})".format(
-            key=self.key,
-            lock=self.lock)
-        )
+        return str("Lock(key={key}, value={lock})".format(key=self.key, lock=self.lock))
 
     def __str__(self) -> str:
         return self.__repr__()

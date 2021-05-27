@@ -8,13 +8,14 @@ from typing import Dict, Generic, Optional, TypeVar
 
 from aiopriman.sync_primitives import SyncPrimitive
 
-T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
+T_co = TypeVar("T_co", bound=SyncPrimitive, covariant=True)
 
 
 class StorageData(Dict[str, T_co]):
     """
     A class containing synchronization primitives
     """
+
     pass
 
 

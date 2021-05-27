@@ -16,17 +16,17 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class BoundSemaphoreManager(
-    BaseManager['BoundedSemaphore', 'BoundSemaphoreStorage'], _ContextManagerMixin
+    BaseManager["BoundedSemaphore", "BoundSemaphoreStorage"], _ContextManagerMixin
 ):
     """
     BoundedSemaphores manager
     """
 
     def __init__(
-            self,
-            storage_data: StorageData[BoundedSemaphore],
-            key: str = "Default",
-            value: int = 1
+        self,
+        storage_data: StorageData[BoundedSemaphore],
+        key: str = "Default",
+        value: int = 1,
     ):
         """
         :param key: Key for managing BoundedSemaphore
@@ -39,8 +39,7 @@ class BoundSemaphoreManager(
 
     async def acquire(self, from_context_manager: bool = False) -> BoundedSemaphore:
         self._current_semaphore = self.prim_storage.get_sync_prim(
-            key=self._key,
-            value=self.value
+            key=self._key, value=self.value
         )
         self._current_semaphore.pending += 1
         await self._current_semaphore.semaphore.acquire()
@@ -49,8 +48,7 @@ class BoundSemaphoreManager(
     def release(self, from_context_manager: bool = False) -> None:
         if not self._current_semaphore:
             self._current_semaphore = self.prim_storage.get_sync_prim(
-                key=self._key,
-                value=self.value
+                key=self._key, value=self.value
             )
 
         # Check waiters before release for not deleting key too early
@@ -63,18 +61,19 @@ class BoundSemaphoreManager(
                 self._current_semaphore.pending -= 1
 
             # Todo remove unnecessary checks if there is, need investigation
-            if (not self._current_semaphore.semaphore.locked() and
-                    not self._current_semaphore.waiters and
-                    not waiters_before_release and
-                    self._current_semaphore.value == self.value and
-                    self._current_semaphore.pending == 0):
+            if (
+                not self._current_semaphore.semaphore.locked()
+                and not self._current_semaphore.waiters
+                and not waiters_before_release
+                and self._current_semaphore.value == self.value
+                and self._current_semaphore.pending == 0
+            ):
                 self.prim_storage.del_sync_prim(self._key)
 
     def locked(self) -> bool:
         return self.prim_storage.locked(self._key)
 
     def resolve_storage(
-            self,
-            storage_data: StorageData[BoundedSemaphore]
+        self, storage_data: StorageData[BoundedSemaphore]
     ) -> BoundSemaphoreStorage:
         return BoundSemaphoreStorage(storage_data=storage_data)

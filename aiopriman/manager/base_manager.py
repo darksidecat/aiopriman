@@ -9,8 +9,8 @@ from typing import Generic, TypeVar
 from aiopriman.storage import BaseStorage, StorageData
 from aiopriman.sync_primitives import SyncPrimitive
 
-T_co = TypeVar('T_co', bound=SyncPrimitive, covariant=True)
-T_Storage = TypeVar('T_Storage', bound=BaseStorage[SyncPrimitive])
+T_co = TypeVar("T_co", bound=SyncPrimitive, covariant=True)
+T_Storage = TypeVar("T_Storage", bound=BaseStorage[SyncPrimitive])
 
 
 class BaseManager(ABC, Generic[T_co, T_Storage]):
@@ -22,7 +22,7 @@ class BaseManager(ABC, Generic[T_co, T_Storage]):
         T_Storage : subclass of SyncPrimitiveStorage
     """
 
-    def __init__(self, storage_data: StorageData[T_co],  key: str = "Default"):
+    def __init__(self, storage_data: StorageData[T_co], key: str = "Default"):
         """
         :param key: Key for managing sync primitive
         :param storage_data: StorageData

@@ -4,8 +4,8 @@ from .lock_manager import LockManager
 from .semaphore_manager import SemaphoreManager
 
 __all__ = (
-    'BaseManager',
-    'BoundSemaphoreManager',
-    'LockManager',
-    'SemaphoreManager',
+    "BaseManager",
+    "BoundSemaphoreManager",
+    "LockManager",
+    "SemaphoreManager",
 )

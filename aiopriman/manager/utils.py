@@ -11,10 +11,12 @@ class _ContextManagerMixin:
     async def __aenter__(self) -> SyncPrimitive:
         return await self.acquire(from_context_manager=True)
 
-    async def __aexit__(self,
-                        exc_type: Optional[Type[BaseException]],
-                        exc_value: Optional[BaseException],
-                        traceback: Optional[TracebackType]) -> None:
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
         self.release(from_context_manager=True)
 
     @abstractmethod
@@ -27,22 +29,17 @@ class _ContextManagerMixin:
 
 
 def lock(
-        manager: Callable[..., AsyncContextManager[Any]],
-        **dec_kwargs: Any
+    manager: Callable[..., AsyncContextManager[Any]], **dec_kwargs: Any
 ) -> Callable[..., Any]:
-    def decorator(
-            func: Callable[..., Any]
-    ) -> Callable[..., Any]:
-
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
-        async def wrapped(
-                *args: Any,
-                **kwargs: Any
-        ) -> Any:
-            dec_storage_data = dec_kwargs.get('storage_data')
-            func_storage_data = kwargs.get('storage_data')
+        async def wrapped(*args: Any, **kwargs: Any) -> Any:
+            dec_storage_data = dec_kwargs.get("storage_data")
+            func_storage_data = kwargs.get("storage_data")
 
-            storage_data = func_storage_data if func_storage_data is not None else dec_storage_data
+            storage_data = (
+                func_storage_data if func_storage_data is not None else dec_storage_data
+            )
             if storage_data is None:
                 raise ValueError("decorated function need keyword param storage_data")
 
@@ -55,4 +52,5 @@ def lock(
                 return await func(*args, **func_params)
 
         return wrapped
+
     return decorator
