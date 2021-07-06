@@ -36,3 +36,4 @@ def test_check_spec():
         pass
 
     assert _check_spec(_get_spec(func), kwargs) == kwargs
+

@@ -4,12 +4,9 @@ Semaphore synchronization primitive
 from __future__ import annotations
 
 import asyncio
-from typing import TYPE_CHECKING, Any, Deque
+from typing import Any, Deque
 
 from .sync_primitive import SyncPrimitive
-
-if TYPE_CHECKING:  # pragma: no cover
-    from asyncio import Future
 
 
 # noinspection PyProtectedMember
@@ -29,7 +26,7 @@ class Semaphore(SyncPrimitive):
         self.semaphore: asyncio.Semaphore = asyncio.Semaphore(value)
 
     @property
-    def waiters(self) -> Deque[Future[Any]]:
+    def waiters(self) -> Deque[asyncio.Future[Any]]:
         """
         :return: waiters
         """

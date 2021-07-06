@@ -1,5 +1,5 @@
 """
-Lock synchronization primitive
+Condition synchronization primitive
 """
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from typing import Any, Deque
 from .sync_primitive import SyncPrimitive
 
 
-class Lock(SyncPrimitive):
+class Condition(SyncPrimitive):
     """
-    Lock synchronization primitive
+    Condition synchronization primitive
     """
 
     def __init__(self, key: str):
@@ -19,7 +19,7 @@ class Lock(SyncPrimitive):
         :param key: key
         """
         super().__init__(key)
-        self.lock: asyncio.Lock = asyncio.Lock()
+        self.condition: asyncio.Condition = asyncio.Condition()
 
     # noinspection PyProtectedMember
     @property
@@ -27,10 +27,15 @@ class Lock(SyncPrimitive):
         """
         :return: waiters
         """
-        return self.lock._waiters  # type: ignore
+        return self.condition._waiters  # type: ignore
 
     def __repr__(self) -> str:
-        return str("Lock(key={key}, value={lock})".format(key=self.key, lock=self.lock))
+        return str(
+            "Condition(key={key}, value={condition})".format(
+                key=self.key,
+                condition=self.condition
+            )
+        )
 
     def __str__(self) -> str:
         return self.__repr__()
